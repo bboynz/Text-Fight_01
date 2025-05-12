@@ -14,9 +14,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\bboyn\\source\\repos\\Text Fight\\Text Fight\\Text Fight.csproj",
-      "projectName": "Text Fight",
-      "projectPath": "C:\\Users\\bboyn\\source\\repos\\Text Fight\\Text Fight\\Text Fight.csproj",
+      "projectUniqueName": "C:\\Users\\bboyn\\source\\repos\\Text Fight\\Text Fight\\TextFight.csproj",
+      "projectName": "TextFight",
+      "projectPath": "C:\\Users\\bboyn\\source\\repos\\Text Fight\\Text Fight\\TextFight.csproj",
       "packagesPath": "C:\\Users\\bboyn\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\bboyn\\source\\repos\\Text Fight\\Text Fight\\obj\\",
       "projectStyle": "PackageReference",
