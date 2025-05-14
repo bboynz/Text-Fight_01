@@ -16,10 +16,11 @@ namespace GameCycle
 
         }
 
-        static Enemy CreateEnemy()
+        static Enemy CreateEnemy(string name, float maxHealth)
         {
             Enemy enemy = new Enemy();
-
+            enemy.EnemyName = name;
+            enemy.MaxHealth = maxHealth;
 
 
 

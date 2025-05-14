@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Text_Fight.Entities;
+using Text_Fight.PlayerActions;
 
 namespace Text_Fight.PlayerActions
 {
@@ -22,22 +23,49 @@ namespace Text_Fight.PlayerActions
         public bool itemDamages;  // If the item damages, and how much it does
         public float DamageAmount;
 
+        public bool requiresSpell; // spell will just be the item name
+        public int spellTimeLimit; // how fast in seconds you need to type the name
+        public string itemSpellName = "";
+        //hit and miss messages can be manualy put in
 
 
-        public void UseItem(Enemy enemy, Player player, int useAmount, Items item) //will make sure to make parameter null if input isn't needed
+        //Could add target variable if needed
+        public void UseItem(int useAmount, Items item, Enemy enemy, Player player) //will make sure to make parameter null if input isn't needed
         {
             Console.WriteLine("Item Used"); //Basic use here
 
             
-            if (item.itemHeals) // Heal Logic
+            
+
+            if (item.requiresSpell) // If a spell is require it will run a quick time using the spell name and time limit
             {
-                item.HealItem(player, useAmount, item);
+                if (QuickTime.WordQuickTime(item.spellTimeLimit, item.itemSpellName, "", "Try again"))
+                {
+                    if (item.itemHeals) // Heal Logic
+                    {
+                        item.HealItem(player, useAmount, item);
+                    }
+
+                    if (item.itemDamages) // Damage Logic
+                    {
+                        item.DamageItem(enemy, useAmount, item);
+                    }
+                }
+
+            }
+            else if (!item.requiresSpell)
+            {
+                if (item.itemHeals) // Heal Logic
+                {
+                    item.HealItem(player, useAmount, item);
+                }
+
+                if (item.itemDamages) // Damage Logic
+                {
+                    item.DamageItem(enemy, useAmount, item);
+                }
             }
 
-            if (item.itemDamages) // Damage Logic
-            {
-                item.DamageItem(enemy, useAmount, item);
-            }
         }
 
         public float HealItem(Player player, int useAmount, Items item) //I will input target when calling the method and also how many item the player uses
@@ -61,7 +89,7 @@ namespace Text_Fight.PlayerActions
         {
             int damageAmount = 0; //Local variable to keep track of damage amount
 
-            Console.WriteLine("Item Used");
+            Console.WriteLine("Item Used to attack");
 
 
             return damageAmount;
