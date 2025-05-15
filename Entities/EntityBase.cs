@@ -160,8 +160,8 @@ namespace Text_Fight.Entities
 
 
 
-        public float BaseDamage;
-        public int Speed;
+        public float BaseDamage = 1.0f;
+        public int Speed = 2;
         public string UserName = "";
 
         public List<Items> Items = new List<Items>();

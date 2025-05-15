@@ -5,6 +5,7 @@ using System.Text;
 using Text_Fight.Entities;
 using Text_Fight.PlayerActions;
 using Text_Fight.Enviroment;
+using System.Data.SqlTypes;
 
 namespace GameCycle
 {
@@ -15,6 +16,18 @@ namespace GameCycle
         static void Main(string[] args)
         {
             Player player = CreatePlayer("BootyBasher9000", 100, 2);
+
+            Items mikuLeech = CreateItem("Miku's Leech", 0, 100, true, 10, "Miku Miku BEAM!");
+
+            player.Items.Add(mikuLeech);
+            player.Items.Add(mikuLeech);
+            player.Items.Add(mikuLeech);
+            player.Items.Add(mikuLeech);
+            player.Items.Add(mikuLeech);
+            player.Items.Add(mikuLeech);
+            player.Items.Add(mikuLeech);
+            player.Items.Add(mikuLeech);
+            player.Items.Add(mikuLeech);
 
             Enemy bob = CreateEnemy("Bob the gob", 100, 25, 1);
             Enemy gob = CreateEnemy("Gob the bob", 100, 25, 1);
@@ -55,10 +68,39 @@ namespace GameCycle
                 
             }
 
-            Console.SetCursorPosition(width/2, Console.CursorTop + 5); //goes up a row to last line, and to the column position
+            Console.SetCursorPosition(width/2, Console.CursorTop + 5); //goes to middle of console and down 5 rows
+            //Username
+            Console.WriteLine(player.UserName);
 
+            //Health
+            Console.SetCursorPosition(width / 2, Console.CursorTop); //goes to middle of console
+            Console.WriteLine("Health <==> {0}", player.CurrentHealth);
+            //Speed
+            Console.SetCursorPosition(width / 2, Console.CursorTop); 
+            Console.WriteLine("Health <==> {0}", player.CurrentHealth);
 
-            Console.WriteLine(player.UserName); //list starts at 0 so I minus 1
+            //Items
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.WriteLine("Items:");
+            int columnPos2 = 0;
+            foreach (Items item in player.Items)
+            {
+                
+                if ((columnPos2 + item.itemName.Length + 2) < Console.WindowWidth) //If the text wont overflow
+                {
+                    Console.WriteLine(item.itemName);
+                    columnPos2 += item.itemName.Length + 2; //moves along so theres enough room
+                    Console.SetCursorPosition(columnPos2, Console.CursorTop - 1);
+
+                }
+                else// So when there is no space to fit the string the cursor will reset the column and go down two rows
+                {
+                    columnPos2 = 0;
+                    Console.SetCursorPosition(columnPos2, Console.CursorTop +2);
+                    Console.WriteLine(item.itemName);
+                }
+                
+            }
 
 
         }
@@ -89,10 +131,31 @@ namespace GameCycle
             player.UserName = name;
             player.MaxHealth = maxHealth;
             player.Speed = speed;
+            player.BaseDamage = 1;
 
             return player;
         }
 
+
+        public static Items CreateItem(string name, float healAmount, float damageAmount, bool needSpell, int spellTimeLimit = 0, string spellWords = "")
+        {
+            //automated bools (execpt spells) in main code
+            Items item = new Items();
+            item.itemName = name;
+
+            item.HealAmount = healAmount;
+            item.DamageAmount = damageAmount;
+
+            item.requiresSpell = needSpell;
+            item.spellTimeLimit = spellTimeLimit;
+            item.itemSpellName = spellWords;
+
+
+
+            
+
+            return item;
+        }
 
     }
 

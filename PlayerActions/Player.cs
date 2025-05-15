@@ -18,15 +18,53 @@ namespace Text_Fight.PlayerActions
 
 
         public bool itemHeals; // If the item heals, and how much it does
-        public float HealAmount;
+        private float healamount = 0;
+        public float HealAmount //Handels bool logic so I can minimize how many variable i need to input when making items
+        { 
+            get {
+                return healamount;
+            }
+            set {
+                healamount = value;
+                if (healamount < 0)
+                {
+                    itemHeals = true;
+                }
+                else
+                {
+                    itemHeals = false;
+                }
+            } 
+        }
 
         public bool itemDamages;  // If the item damages, and how much it does
-        public float DamageAmount;
+        private float damageamount = 0;
+        public float DamageAmount //Handels bool logic so I can minimize how many variable i need to input when making items
+        {
+            get
+            {
+                return damageamount;
+            }
+            set
+            {
+                damageamount = value;
+                if (healamount < 0)
+                {
+                    itemDamages = true;
+                }
+                else
+                {
+                    itemDamages = false;
+                }
+            }
+        }
 
         public bool requiresSpell; // spell will just be the item name
         public int spellTimeLimit; // how fast in seconds you need to type the name
         public string itemSpellName = "";
         //hit and miss messages can be manualy put in
+
+        
 
 
         //Could add target variable if needed
