@@ -158,12 +158,12 @@ namespace Text_Fight.PlayerActions
         }
 
         //Clears specific line
-        public static void ClearLine(int column) //NEED TO MAKE BETTER METHOD WHERE YOU CAN INPUT COLUMNS AND ROWS AND IT DOES FOR YOU (using loops)
+        public static void ClearLine(int back) //NEED TO MAKE BETTER METHOD WHERE YOU CAN INPUT COLUMNS AND ROWS AND IT DOES FOR YOU (using loops)
         {
 
 
             int currentLineCursor = Console.CursorTop;//last line
-            Console.SetCursorPosition(0, Console.CursorTop);//the line where we want the cursor to end up
+            Console.SetCursorPosition(0, Console.CursorTop - back);//the line where we want the cursor to end up
             Console.Write(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(0, currentLineCursor);//then deletes line with clear line
 

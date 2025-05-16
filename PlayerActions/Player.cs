@@ -56,6 +56,7 @@ namespace Text_Fight.PlayerActions
                 {
                     itemDamages = false;
                 }
+                
             }
         }
 
@@ -128,6 +129,7 @@ namespace Text_Fight.PlayerActions
             int damageAmount = 0; //Local variable to keep track of damage amount
 
             Console.WriteLine("Item Used to attack");
+
 
 
             return damageAmount;

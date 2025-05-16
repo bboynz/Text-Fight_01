@@ -95,7 +95,7 @@ namespace Text_Fight.Entities
     class Player
     {
         private bool isdead; //This says if the entity is dead
-
+        private bool isblocking;
 
         private float maxhealth; // this is private variable used in the getter setter
         public float MaxHealth
@@ -147,6 +147,10 @@ namespace Text_Fight.Entities
         }
         public void Damage(float amount)
         {
+            if (isblocking)
+            {
+                amount = amount/2;
+            }
             Heal(-amount);
         }
         public void Attack(float damage, params Enemy[] targets)
