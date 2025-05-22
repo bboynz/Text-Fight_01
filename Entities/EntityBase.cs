@@ -11,8 +11,16 @@ namespace Text_Fight.Entities
     
     class Enemy
     {
-        private bool isdead; //This says if the entity is dead
+        public bool isdead; //This says if the entity is dead
         
+        public void CheckHealth()
+        {
+            if (currentHealth <= 0 && !isdead)
+            {
+                isdead = true;
+            }
+        }
+
 
         private float maxhealth; // this is private variable used in the getter setter
         public float MaxHealth
@@ -94,8 +102,10 @@ namespace Text_Fight.Entities
     }
     class Player
     {
-        private bool isdead; //This says if the entity is dead
-        private bool isblocking;
+        public bool isdead; //This says if the entity is dead
+        public bool isblocking;
+        public bool isparrying;
+        public bool isvulnerable;
 
         private float maxhealth; // this is private variable used in the getter setter
         public float MaxHealth
@@ -122,7 +132,7 @@ namespace Text_Fight.Entities
             {
                 return currentHealth;
             }
-            private set
+            set
             {
                 var previousHealth = currentHealth;
                 currentHealth = Math.Clamp(value, 0, MaxHealth); //This makes sure that the value in between the correct amounts
@@ -134,8 +144,10 @@ namespace Text_Fight.Entities
                     MaxHealth = maxhealth,
                     IsHeal = previousHealth <= currentHealth
                 };
-                if (currentHealth != 0 && !isdead)
+                if (currentHealth <= 0 && !isdead)
                 {
+                    Console.WriteLine("Oh Nooo Ya Ded");
+                    Console.ReadLine();
                     isdead = true;
                 }
             }
@@ -147,11 +159,27 @@ namespace Text_Fight.Entities
         }
         public void Damage(float amount)
         {
+
             if (isblocking)
             {
                 amount = amount/2;
             }
             Heal(-amount);
+            if (currentHealth <= 0 && !isdead)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Clear();
+                Console.SetCursorPosition((Console.WindowWidth / 2), (Console.WindowHeight / 2));
+                Console.WriteLine("Oh Nooo Ya Ded");
+                Console.ReadLine();
+                
+
+                //TEMP ENDING CODE________________
+                    System.Environment.Exit(1);
+                //--------------------------------
+                isdead = true;
+            }
         }
         public void Attack(float damage, params Enemy[] targets)
         {
