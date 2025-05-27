@@ -9,13 +9,41 @@ using Text_Fight;
 
 namespace Text_Fight.PlayerActions
 {
-    class Inventory
+    class Weapon
     {
+        public float damage;
+        public string weaponName = "";
+
     }
+
+
     class Items
     {
         public string itemName = "";
         public int itemID; // Incase I need to Sort items;
+
+
+        public bool shopItem;
+        private int itemPrice = 0;
+        public int ItemPrice //Handels bool logic so I can minimize how many variable i need to input when making items
+        {
+            get
+            {
+                return itemPrice;
+            }
+            set
+            {
+                itemPrice = value;
+                if (itemPrice > 0)
+                {
+                    shopItem = true;
+                }
+                else
+                {
+                    shopItem = false;
+                }
+            }
+        }
 
 
         public bool itemHeals; // If the item heals, and how much it does
@@ -37,6 +65,7 @@ namespace Text_Fight.PlayerActions
                 }
             } 
         }
+
 
         public bool itemDamages;  // If the item damages, and how much it does
         public bool splashDamage;
@@ -62,6 +91,7 @@ namespace Text_Fight.PlayerActions
             }
         }
 
+
         public bool requiresSpell; // spell will just be the item name
         public int spellTimeLimit; // how fast in seconds you need to type the name
         public string itemSpellName = "";
@@ -77,33 +107,110 @@ namespace Text_Fight.PlayerActions
             Console.WriteLine("Item Used"); //Basic use here
 
             Enemy enemy = null;
-            
+
 
 
             if (item.requiresSpell) // If a spell is require it will run a quick time using the spell name and time limit
             {
                 if (QuickTime.WordQuickTime(item.spellTimeLimit, item.itemSpellName, "", "Try again"))
                 {
+
                     if (item.itemHeals) // Heal Logic
                     {
-                        Console.WriteLine("press enter to healing item with spell " + item.itemName);
-                        Console.ReadLine();
+                        for (int i = 0; i < useAmount; i++) //Damages target for spefic amount for all items used
+                        {
+                            item.HealItem(player, useAmount, item);
+                            player.Items.Remove(item);
 
-                        item.HealItem(player, useAmount, item);
+                            Console.WriteLine("Player Healed");
+                            Thread.Sleep(10 * 100);
+
+                        }
+
                     }
 
                     if (item.itemDamages) // Damage Logic
                     {
-                        
+
                         if (splashDamage)
                         {
-                            for (int i = 0; i < enemies.Length; i++) //loops through all enemies to damage all enemies
+                            for (int i = 0; i < useAmount; i++) //Damages target for spefic amount for all items used
                             {
+                                for (int k = 0; k < enemies.Length; k++) //loops through all enemies to damage all enemies
+                                {
+                                    enemies[k].Damage(item.DamageAmount * player.BaseDamage);
+                                }
+                                player.Items.Remove(item);
 
-                                enemies[i].Damage(item.DamageAmount);
                             }
+
                         }
                         else
+                        {
+                            while (enemy == null)
+                            {
+                                Console.WriteLine("Who to attack?");
+                                string target = Console.ReadLine().ToString(); //Get name of enemy
+                                for (int i = 0; i < enemies.Length; i++) //loops through all enemies to find the target
+                                {
+                                    if (enemies[i].EnemyName.ToLower() == target.ToLower())
+                                    {
+                                        enemy = enemies[i];
+                                    }
+                                }
+
+                            }
+
+                            Console.WriteLine("Attacks " + enemy.EnemyName);
+                            for (int i = 0; i < useAmount; i++) //Damages target for spefic amount for all items used
+                            {
+                                enemy.Damage(item.DamageAmount * player.BaseDamage);
+                                player.Items.Remove(item);
+
+                            }
+
+                            //  item.DamageItem(enemy, useAmount, item); // If I need any multiplier logiv or smth
+                        }
+
+                    }
+                }
+
+            }
+            else if (!item.requiresSpell)
+            {
+                if (item.itemHeals) // Heal Logic
+                {
+                    for (int i = 0; i < useAmount; i++) //Damages target for spefic amount for all items used
+                    {
+                        item.HealItem(player, useAmount, item);
+                        player.Items.Remove(item);
+
+                        Console.WriteLine("Player Healed");
+                        Thread.Sleep(10 * 100);
+
+                    }
+
+                }
+
+                if (item.itemDamages) // Damage Logic
+                {
+
+                    if (splashDamage)
+                    {
+                        for (int i = 0; i < useAmount; i++) //Damages target for spefic amount for all items used
+                        {
+                            for (int k = 0; k < enemies.Length; k++) //loops through all enemies to damage all enemies
+                            {
+                                enemies[k].Damage(item.DamageAmount*player.BaseDamage);
+                            }
+                            player.Items.Remove(item);
+
+                        }
+
+                    }
+                    else
+                    {
+                        while (enemy == null)
                         {
                             Console.WriteLine("Who to attack?");
                             string target = Console.ReadLine().ToString(); //Get name of enemy
@@ -115,36 +222,19 @@ namespace Text_Fight.PlayerActions
                                 }
                             }
 
-                            Console.WriteLine("Attacks "+enemy.EnemyName);
-                            for (int i = 0; i < useAmount; i++) //Damages target for spefic amount for all items used
-                            {
-                                enemy.Damage(item.DamageAmount);
-                                player.Items.Remove(item);
-
-                            }
-
-                            //  item.DamageItem(enemy, useAmount, item); // If I need any multiplier logiv or smth
                         }
-                        
+
+                        Console.WriteLine("Attacks " + enemy.EnemyName);
+                        for (int i = 0; i < useAmount; i++) //Damages target for spefic amount for all items used
+                        {
+                            enemy.Damage(item.DamageAmount*player.BaseDamage);
+                            player.Items.Remove(item);
+
+                        }
+
+                        //  item.DamageItem(enemy, useAmount, item); // If I need any multiplier logiv or smth
                     }
-                }
 
-            }
-            else if (!item.requiresSpell)
-            {
-                if (item.itemHeals) // Heal Logic
-                {
-                    Console.WriteLine("Press enter to use healing item " + item.itemName);
-                    Console.ReadLine();
-                    item.HealItem(player, useAmount, item);
-                }
-
-                if (item.itemDamages) // Damage Logic
-                {
-                    Console.WriteLine("Press enter to use damaging item " + item.itemName);
-                    Console.ReadLine();
-
-                    item.DamageItem(enemy, useAmount, item);
                 }
             }
 
@@ -156,7 +246,7 @@ namespace Text_Fight.PlayerActions
 
             for (int i = 0; i < useAmount; i++) //loops through all enemies to find the target
             {
-                player.Heal(HealAmount);
+                player.Heal( player.MaxHealth/(item.healamount/100) ); //Heals A percentacge of health 
             }
 
             return healAmount;

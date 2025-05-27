@@ -17,13 +17,16 @@ namespace Text_Fight.PlayerActions
 
             List<char> word = new List<char>(inputedWord);//makes the string a collection of chars
             int wordLength = word.Count;    //may be unneeded but cleans up code - This means the loop will runn through all chars in the string
-
+            
+            Console.WriteLine("Press enter to start a quick time, your word you need to enter is " + inputedWord);
+            Console.ReadLine();
+            DramaticWrite(3, "3", "2", "1", "GO!");
+            
             var timer = new Stopwatch();
             timer.Start();
-
             Console.WriteLine("!QUICK! - Input the word: " + inputedWord); // warns user
             Thread.Sleep(10 * 100); //10 seconds
-            DramaticWrite(3, "3", "2", "1", "GO!");
+
 
             //Loops through the string causing a quick time event for every character
             Console.WriteLine(wordLength);
@@ -70,8 +73,8 @@ namespace Text_Fight.PlayerActions
                 string[] words = inputedWord.Split(' '); //Splits the sentence into words
                 DramaticWrite(4, words); // This dramaticly says all the words in the inputed sentence
 
-                Console.WriteLine("!!!success!!!\n\nEnter to continue:");
-                Console.ReadLine();
+                Console.WriteLine("!!!success!!!\n\n");
+                
                 achieved = true;
             }
             return achieved;

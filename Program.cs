@@ -1,4 +1,5 @@
-﻿using Text_Fight.Entities;
+﻿using System.Numerics;
+using Text_Fight.Entities;
 using Text_Fight.Enviroment;
 using Text_Fight.PlayerActions;
 
@@ -10,31 +11,128 @@ namespace GameCycle
         
         static void Main(string[] args)
         {
+            
+
+            Console.Clear();
+            Console.WriteLine("\x1b[3J");
+
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
+            Console.WriteLine("\n\n\n\n\n");
 
 
-            Player player = CreatePlayer("BootyBasher9000", 100, 2);
+            
 
-            Items mikuLeech = CreateItem("Miku's Leek", 0, 100, true, 10, "Miku Miku BEAM!");
-            Items chugJug = CreateItem("Chug Jug", 50, 0, false);
+            QuickTime.DramaticWrite(5, "!!!Welcome To My Wonderous DUNGEON!!!  (~v~)/ ");
+            QuickTime.DramaticWrite(1, "!!!Welcome To My Wonderous DUNGEON!!!  (~v~)- ");
+            QuickTime.DramaticWrite(1, "!!!Welcome To My Wonderous DUNGEON!!!  (~v~)/ ");
+            QuickTime.DramaticWrite(1, "!!!Welcome To My Wonderous DUNGEON!!!  (~v~)- ");
+            Console.WriteLine("!!!Welcome To My Wonderous DUNGEON!!!  (~v~)/ ");
+            Console.WriteLine("\n\nDo You want a long introduction {Y/N}");
+            if (Console.ReadLine().ToString().ToLower() == "y")
+            {
+                Console.Clear();
+                Console.SetCursorPosition(Console.WindowWidth/2 - 20, Console.WindowHeight/2);
+                QuickTime.DramaticWrite(20, "(-o-)/  |  'Howdy Im Bodhi! '");
+                QuickTime.DramaticWrite(30, "(-0-).- |  'Im going to explain how things work around here'");
+                QuickTime.DramaticWrite(30, "('-')l  |  'First off Ill give you a breath run down'");
+                QuickTime.DramaticWrite(30, "(-0-).- |  'Here In the dungeon you will be facing many creatures'");
+                QuickTime.DramaticWrite(40, "(-o-).  |  'Enemies will have a chance to drop items and give you XP'");
+                QuickTime.DramaticWrite(50, "(-0-)   |  'Items can be used in combat with the use command follow by the items name.'");
+                QuickTime.DramaticWrite(50, "(-o-)   |  'Some Items may require a quick time event, to cast a spell'");
 
-            player.Items.Add(mikuLeech);
-            player.Items.Add(mikuLeech);
-            player.Items.Add(mikuLeech);
-            player.Items.Add(chugJug);
+                QuickTime.DramaticWrite(40, "(-.-).  |  'You and the enemies you face have different stats'");
+                QuickTime.DramaticWrite(20, "('u')/  |  'First is Health!'");
+                QuickTime.DramaticWrite(50, "('0').  |  'If your, or your enemies health run out they/you DIE!'");
+                QuickTime.DramaticWrite(30, "(X-X).  |  'If ya dead its game over!'");
+                QuickTime.DramaticWrite(40, "('0').- |  'But, if your enemies die ya get some goodies!'");
+                QuickTime.DramaticWrite(20, "('u')/  |  'Next is your Speed!'");
+                QuickTime.DramaticWrite(50, "('o').  |  'Speed determines how many turns you/enemies have'");
+                QuickTime.DramaticWrite(40, "('0').- |  'and whoever is faster goes first!'");
+                QuickTime.DramaticWrite(30, "('u')/  |  'Now last, but not least is Damage!'");
+                QuickTime.DramaticWrite(30, "(-.-)   |  'this is just how much damage ya deal...'");
+
+
+                QuickTime.DramaticWrite(40, "('0').  |  'Ya can also use the try command to block/parry'");
+                QuickTime.DramaticWrite(50, "('o').  |  'Blocking and parring require ya to do a quick time! (typing block or parry)'");
+                QuickTime.DramaticWrite(40, "('0').  |  'Blocking cuts the damage in half if ya succeed'");
+                QuickTime.DramaticWrite(40, "(7^P^)7 |  'Parrying stops the enemy attack and takes 10% of their health!'");
+                QuickTime.DramaticWrite(50, "(-.-)   |  'But the quick time is harder, and if you fail; ya take double damage...'");
+
+                QuickTime.DramaticWrite(30, "(-u-).  |  'Ya should be ready now'");
+                QuickTime.DramaticWrite(30, "(^o^).  |  'Lets part ways with a lil' dance!'");
+
+                for (int i = 4; i !=0; i--)
+                {
+                    QuickTime.DramaticWrite(1, "  (-u-)    |  See");
+                    QuickTime.DramaticWrite(1, " (-u-).    |  See");
+                    QuickTime.DramaticWrite(1, " (-u-).-   |  See");
+                    QuickTime.DramaticWrite(1, " (-u-).~   |  Ya");
+                    QuickTime.DramaticWrite(1, " (-u-).~   |  Ya");
+                    QuickTime.DramaticWrite(1, " (-u-).-   |  Ya");
+                    QuickTime.DramaticWrite(1, "  (-u-).   |  See");
+                    QuickTime.DramaticWrite(1, "  (-u-)    |  See");
+                    QuickTime.DramaticWrite(1, " .(-u-)    |  See");
+                    QuickTime.DramaticWrite(1, " -.(-u-)   |  See");
+                    QuickTime.DramaticWrite(1, " ~.(-u-)   |  Ya");
+                    QuickTime.DramaticWrite(1, " ~.(-u-)   |  Yaa");
+                    QuickTime.DramaticWrite(1, " -.(-u-)   |  Yaaa");
+                    QuickTime.DramaticWrite(1, " .(-u-)    |  Yaaaa");
+                }
+
+            }
+
+
+
+            Console.WriteLine("\nWhats Your Username?");
+            string username = Console.ReadLine();
+
+            Player player = CreatePlayer(username, 100, 2);
+            player.CurrentWeapon = CreateWeapon(50, "stick");
+            
+            
+
 
             while (!player.isdead)
             {
-                Console.WriteLine("Press enter to start Battle!");
+                player.round++;
+
+                Console.WriteLine("\n\n Press enter to start Round!\n\n");
                 Console.ReadLine();
-                //Revives enemies
-                Enemy bob = CreateEnemy("Bobgob", 100, 25, 1);
-                Enemy gob = CreateEnemy("Gobbob", 100, 25, 1);
-                Enemy hob = CreateEnemy("Hobtob", 100, 25, 1);
-                Enemy tob = CreateEnemy("great bodhi", 200, 50, 2);
-                //
-                Battle(player, bob, hob, tob, gob);
+                QuickTime.DramaticWrite(1, ("LETS GO! '" + @"\" + "(>.<).  !"));
+                QuickTime.DramaticWrite(1, ("LETS GO! .(>.<)/'  !"));
+                QuickTime.DramaticWrite(1, ("LETS GO! '" + @"\" + "(>.<).  !"));
+                QuickTime.DramaticWrite(1, ("LETS GO! .(>.<)/'  !"));
+                QuickTime.DramaticWrite(1, ("LETS GO! '" + @"\" + "(>.<).  !"));
+                QuickTime.DramaticWrite(1, ("LETS GO! .(>.<)/'  !"));
+
+
+
+               
+
+                
+
+                List<Enemy> enemies = new List<Enemy>();
+
+                int enemyProgress = 1;
+                if(player.round % 2 == 0) //every even round adds an enemy
+                {
+                    enemyProgress++;
+                }
+
+
+                for (int i = enemyProgress; i > 0; i--)
+                {
+                    enemies.Add(RanEnemies(player.round));
+                }
+
+                
+
+                Enemy[] SelectedEnemies = enemies.ToArray();
+
+                Shop(player);
+
+                Battle(player, SelectedEnemies);
 
             }
 
@@ -50,19 +148,25 @@ namespace GameCycle
             {
                 Console.WriteLine("Enemy Turn\n\npls wait");
                 Thread.Sleep(1000);
+                
+                if (player.isparrying)
+                {
+                    enemy.Damage(enemy.MaxHealth/10);
+                }
 
                 //enemy Turn
                 if (player.isvulnerable)
                 {
-                    player.Damage(enemy.AttackDamage + enemy.AttackDamage * (1 / 2));//adds half of damage to total then attacks
+                    player.Damage(enemy.AttackDamage + (enemy.AttackDamage * (1 / 2)));//adds half of damage to total then attacks
                     Console.WriteLine("Player damaged!");
 
-                    string OverDamage = ((enemy.AttackDamage + enemy.AttackDamage * (1 / 2)) / 5).ToString(); //Over time effect for damage
+                    string OverDamage = ((enemy.AttackDamage + (enemy.AttackDamage * (1 / 2))) / 5).ToString(); //Over time effect for damage
 
                     for (int i = 5; i > 1; i--)
                     {
                         QuickTime.DramaticWrite(2, OverDamage);
                     }
+                    
                 }
 
                 if (player.isblocking)
@@ -76,9 +180,11 @@ namespace GameCycle
                     {
                         QuickTime.DramaticWrite(3, OverDamage);
                     }
+
+                    
                 }
 
-                if (!player.isvulnerable && !player.isblocking)
+                if (!player.isvulnerable && !player.isblocking && !player.isparrying)
                 {
                     player.Damage(enemy.AttackDamage);
                     Console.WriteLine("Player damaged!");
@@ -92,7 +198,9 @@ namespace GameCycle
                 }
 
             }
-
+            player.isblocking = false;
+            player.isvulnerable = false;
+            player.isparrying = false;
 
         }
         private static void PlayerTurn(Player player, List<Enemy> enemiesList, params Enemy[] enemies)
@@ -105,11 +213,13 @@ namespace GameCycle
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 try
                 {
-                    Console.WriteLine("Player's Turn!");
+                    
+                    Console.WriteLine("\nPlayer's Turn!");
+                    Console.WriteLine("Input 'hlp' for commands");
                     Console.WriteLine("\n\n"); // so when answer is incorrect it doesn't delete said txt (If I use Set cursor position it goes out of window bounds)
                     string input = Console.ReadLine().ToString().ToLower();
 
-                    if (input.Contains("atk"))
+                    if (input.Contains("atk") || input.Contains("a"))
                     {
                         string target = input.Replace("atk ", "");
                         Console.WriteLine("trys to attack " + target);
@@ -121,13 +231,19 @@ namespace GameCycle
                         for (int i = 0; i < enemiesList.Count; i++) //loops through all enemies to find the target
                         {
 
-                            if (enemiesList[i].EnemyName.ToLower() == target)
+                            if (enemiesList[i].EnemyName.ToLower() == target || enemiesList[i].enemyIndex == target)
                             {
                                 targetEnemy = enemies[i];
                                 targetEnemy.Damage(player.BaseDamage * 100); //Need to add weapons
-                                Console.WriteLine(" tried to  damage  {0} for {1} ", targetEnemy.EnemyName, player.BaseDamage * 100);
+                                Console.WriteLine(" tried to  damage  {0} for {1} ", targetEnemy.EnemyName, player.BaseDamage * player.CurrentWeapon.damage);
                                 found = true;
+                                break;
                             }
+                        }
+                        if(target == player.UserName.ToLower() ){
+                            player.Damage(player.BaseDamage * player.CurrentWeapon.damage);
+                            found = true;
+                            break;
                         }
 
                         if (found == false)
@@ -140,7 +256,7 @@ namespace GameCycle
                         loop = false;
                         break;
                     }
-                    else if (input.Contains("use"))
+                    else if (input.Contains("use") || input.Contains("u"))
                     {
                         string target = input.Replace("use ", "");
 
@@ -195,7 +311,7 @@ namespace GameCycle
                             }
                         }
                     }
-                    else if (input.Contains("try"))
+                    else if (input.Contains("try") || input.Contains("t"))
                     {
                         string target = input.Replace("try ", "");
                         Console.WriteLine("trys to " + target);
@@ -233,7 +349,45 @@ namespace GameCycle
 
                         break;
                     }
-                    else if (input.Contains("hlp"))
+                    else if (input.Contains("chk") || input.Contains("c"))
+                    {
+                        List<Items> items = player.Items;// the items the player has
+                        Items targetItem = null; //for interacting with items that match the requested name
+
+                        string target = input.Replace("chk ", "");
+                        for (int i = 0; i < items.Count; i++) //loops through all items to find the target
+                        {
+                            if (items[i].itemName.ToLower() == target)
+                            {
+                                targetItem = items[i];
+
+                            }
+                        }
+                        Console.WriteLine("_____________");
+                        Console.WriteLine("Item Name: {0}",targetItem.itemName);
+
+                        Console.WriteLine("Item needs spell: {0}", targetItem.requiresSpell);
+
+                        if (targetItem.itemHeals)
+                        {
+                            Console.WriteLine("Heals the player by {0}", targetItem.HealAmount);
+                        }
+                        if (targetItem.itemDamages)
+                        {
+                            if (targetItem.splashDamage)
+                            {
+                                Console.WriteLine("Does {0} damage to all enemies", targetItem.DamageAmount);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Does {0} damage to single target", targetItem.DamageAmount);
+                            }
+
+                        }
+                        Console.WriteLine("Press enter to continue");
+                        Console.ReadLine();
+                    }
+                    else if (input.Contains("hlp") || input.Contains("h"))
                     {
                         InputHelp();
                         Console.WriteLine("Press enter to continue");
@@ -274,9 +428,13 @@ namespace GameCycle
             List<Enemy> enemiesList = new List<Enemy>();
             enemiesList = enemies.ToList();
 
+            int remainingTurns;
             string Turn = "";
-            for (int i = 0; i < enemiesList.Count; i++) //loops through all enemies to who goes first
+            for (int i = 0; i < enemiesList.Count; i++) //loops through all enemies to who goes first and sets ups the enemies index numbers
             {
+                enemiesList[i].enemyIndex = i.ToString();
+
+
 
                 if (enemiesList[i].Speed > player.Speed)
                 {
@@ -289,8 +447,10 @@ namespace GameCycle
                 }
             }
 
+            //Loops till no enemies remaining
             while (enemiesList.Count != 0 && enemies.Length != 0)
             {
+
                 enemies = enemiesList.ToArray();
                
 
@@ -300,26 +460,36 @@ namespace GameCycle
                 }
                 if (Turn == "player")
                 {
+                    remainingTurns = player.Speed;
+
                     Console.Title = "Battle: Player";
                     UpdateBattleGui(player, enemies);
-                    InputHelp();
+                    
                     for (int i = player.Speed; i != 0; i--)
                     {
+                        //Checks enemy status
                         for (int k = 0; k < enemiesList.Count; k++) //loops through all enemies to who is alive before every turn the player has
                         {
                             enemiesList[k].CheckHealth();
                             if (enemiesList[k].isdead)
                             {
+                                
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("\n"+enemiesList[k].EnemyName + " Died! \n\n Enter to continue:");
+                                player.currentDoubloons += enemiesList[k].Doubloons;
                                 Console.ReadLine();
                                 enemiesList.Remove(enemiesList[k]);
                                 enemies = enemiesList.ToArray();
                                 Console.ForegroundColor = ConsoleColor.White;
                                 UpdateBattleGui(player, enemies);
+                                k--;
                             }
                         }
+                        
+                        remainingTurns--;
+                        Console.WriteLine("\nTurns remaining: "+remainingTurns);
 
+                        //Runs player turn code
                         PlayerTurn(player, enemiesList, enemies);
                     }
                     Turn = "enemy";
@@ -332,13 +502,17 @@ namespace GameCycle
                         enemiesList[k].CheckHealth();
                         if (enemiesList[k].isdead)
                         {
+                            
+
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("\n" + enemiesList[k].EnemyName + " Died! \n\n Enter to continue:");
+                            player.currentDoubloons += enemiesList[k].Doubloons;
                             Console.ReadLine();
                             enemiesList.Remove(enemiesList[k]);
                             enemies = enemiesList.ToArray();
                             Console.ForegroundColor = ConsoleColor.White;
                             UpdateBattleGui(player, enemies);
+                            k--;
                         }
                     }
 
@@ -370,11 +544,219 @@ namespace GameCycle
 
             Console.WriteLine("!!!Battle Over!!!");
             Console.ReadLine();
+            player.score++;
+        }
+        
+        public static void Shop(Player player)
+        {
+            
+
+            Items items1 = RanShopItems();
+            Items items2 = RanShopItems();
+            Items items3 = RanShopItems();
+            Items items4 = RanShopItems();
+
+
+
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Magenta;
+
+                Console.Clear();
+                Console.WriteLine("\x1b[3J");
+
+
+                Console.WriteLine("Shop_________________________________________");
+
+                Console.WriteLine("\nUpgrades_________________________");
+            
+                Console.WriteLine("Speed: 10 Doubloons per 1");
+                Console.WriteLine("Damage: 2 Doubloons per .1");
+                Console.WriteLine("Health: 1 Doubloons per 10");
+
+                Console.WriteLine("\n\nItems_________________________");
+
+                Console.WriteLine("1: {0}, cost: {1}",items1.itemName, items1.ItemPrice);
+                Console.WriteLine("2: {0}, cost: {1}", items2.itemName, items2.ItemPrice);
+                Console.WriteLine("3: {0}, cost: {1}", items3.itemName, items3.ItemPrice);
+                Console.WriteLine("4: {0}, cost: {1}", items4.itemName, items4.ItemPrice);
+
+
+                //Player GUI -----
+                Console.WriteLine("\n\n"); //so name is more visible
+                //Username
+                Console.WriteLine(player.UserName);
+                //Health
+                Console.WriteLine("Health <==> {0}", player.CurrentHealth);
+                //Speed
+                Console.WriteLine("Speed <==> {0}", player.Speed);
+                //Damage
+                Console.WriteLine("Damage Mult <==> {0}", player.BaseDamage);
+                //Damage
+                Console.WriteLine("Total Damage <==> {0}", player.BaseDamage*player.CurrentWeapon.damage);
+
+                //Items
+                Console.WriteLine("\nItems:");
+                int columnPos2 = 0;
+
+                foreach (Items item in player.Items)
+                {
+
+                    if ((columnPos2 + item.itemName.Length + 2) < Console.WindowWidth) //If the text wont overflow
+                    {
+                        Console.WriteLine(item.itemName);
+                        columnPos2 += item.itemName.Length + 2; //moves along so theres enough room
+                        Console.SetCursorPosition(columnPos2, Console.CursorTop - 1);
+
+                    }
+                    else// So when there is no space to fit the string the cursor will reset the column and go down two rows
+                    {
+                        columnPos2 = 0;
+                        Console.WriteLine("\n");
+                        Console.SetCursorPosition(columnPos2, Console.CursorTop);
+                        Console.WriteLine(item.itemName);
+                    }
+
+                }
+
+            
+
+
+
+
+                Console.WriteLine("\n\n\nCurrent Doubloons Owned: " + player.currentDoubloons);
+                Console.WriteLine("\nInput numbers for items, speed or damage for upgrades, and exit to leave the shop");
+
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+
+                string Input = Console.ReadLine().ToString();
+
+                if (Input.ToLower() == "speed" && player.currentDoubloons >= 10)
+                {
+                    player.Speed++;
+                    player.currentDoubloons -= 10;
+                }
+                else if (Input.ToLower() == "damage" && player.currentDoubloons >= 2)
+                {
+                    player.BaseDamage += 0.1f;
+                    player.currentDoubloons -= 2;
+                }
+                else if (Input.ToLower() == "health" && player.currentDoubloons >= 1)
+                {
+                    float prevHealth = player.CurrentHealth;
+                    player.MaxHealth += 10;
+                    player.CurrentHealth = prevHealth;
+                    player.currentDoubloons -= 1;
+                }
+                else if (Input.ToLower() == "1" && player.currentDoubloons >= items1.ItemPrice)
+                {
+                    player.Items.Add(items1);
+                    player.currentDoubloons -= items1.ItemPrice;
+                    Console.WriteLine(items1.itemName + " Bought");
+                }
+                else if (Input.ToLower() == "2" && player.currentDoubloons >= items2.ItemPrice)
+                {
+                    player.Items.Add(items2);
+                    player.currentDoubloons -= items2.ItemPrice;
+                    Console.WriteLine(items2.itemName + " Bought");
+                }
+                else if (Input.ToLower() == "3" && player.currentDoubloons >= items3.ItemPrice)
+                {
+                    player.Items.Add(items3);
+                    player.currentDoubloons -= items3.ItemPrice;
+                    Console.WriteLine(items4.itemName + " Bought");
+                }
+                else if (Input.ToLower() == "4" && player.currentDoubloons >= items4.ItemPrice)
+                {
+                    player.Items.Add(items4);
+                    player.currentDoubloons -= items4.ItemPrice;
+                    Console.WriteLine(items4.itemName + " Bought");
+                }
+                else if (Input.ToLower() == "exit")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Wrong input or not enough doubloons");
+                }
+            }
+        }
+
+        private static Items RanShopItems()
+        {
+            Items SelectedItem;
+            List<Items> items = new List<Items>();  //So I can add and edit the items
+            Random random = new Random();
+
+            Items mikuLeech = CreateItem("Miku's Leek", 0, 100, 1, true, 5, "Miku Miku BEAM!");
+
+            Items chugJug = CreateItem("Chug Jug", 50, 0, 2, false);
+
+            Items boogieBomb = CreateItem("Boogie Bomb", 0, 10, 2, false);
+            boogieBomb.splashDamage = true;
+
+            Items GibsonFlyingV = CreateItem("Gibson flying v with a vibrato", 100, 1000, 5, true, 10, "Nothing can happen till you swing the bat");
+
+            Items fruitSalad = CreateItem("Fruit Salad", 100, 0, 3, false);
+
+
+
+            items.Add(mikuLeech);
+            items.Add(chugJug);
+            items.Add(boogieBomb);
+            items.Add(GibsonFlyingV);
+            items.Add(fruitSalad);
+
+
+            SelectedItem = items[random.Next(0,items.Count)];   //Gives a random item
+            return SelectedItem;
+        }
+
+        private static Enemy RanEnemies(int round)
+        {
+            Enemy SelectedEnemy;
+            List<Enemy> enemies = new List<Enemy>();  //So I can add and edit the items
+            Random random = new Random();
+
+            float ProgressiveDif = Convert.ToInt32(9*(Math.Pow(2, round)));
+
+            if (round == 1)
+            {
+                ProgressiveDif = 0;
+            }
+
+            Enemy bob = CreateEnemy("Apple", 50 + ProgressiveDif, 25 + ProgressiveDif, 1, round*3);
+            Enemy gob = CreateEnemy("Pear", 50 + ProgressiveDif, 25 + ProgressiveDif, 1, round*3);
+            Enemy hob = CreateEnemy("Orange", 50 + ProgressiveDif, 25 + ProgressiveDif, 1, round*3);
+            Enemy bodhiG = CreateEnemy("great bodhi", 100 + (2 * ProgressiveDif), 50 + ProgressiveDif, 2, round * 5);
+            Enemy goblin = CreateEnemy("Goblin", 10 + ProgressiveDif, 50 + ProgressiveDif, 1, round);
+            Enemy carrot = CreateEnemy("Carrot", 20 + ProgressiveDif, 100 + ProgressiveDif, 1, round * 3);
+            Enemy cabbage = CreateEnemy("Cabbage", 200 + ProgressiveDif, 5 + ProgressiveDif, 1, round * 3);
+
+
+
+            enemies.Add(bob);
+            enemies.Add(gob);
+            enemies.Add(hob);
+            enemies.Add(bob);
+            enemies.Add(gob);
+            enemies.Add(hob);
+            enemies.Add(bodhiG);
+            enemies.Add(carrot);
+            enemies.Add(carrot);
+            enemies.Add(cabbage);
+            enemies.Add(cabbage);
+
+
+
+            SelectedEnemy = enemies[random.Next(0, enemies.Count)];   //Gives a random item
+            return SelectedEnemy;
         }
 
 
 
-            //  Enviroment / game progression
+        //  Enviroment / game progression
         public static Scaling ApplyScaling(double round)
         {
             Scaling scale = new Scaling();
@@ -407,13 +789,14 @@ namespace GameCycle
 
 
             //  MAKE CLASSES
-        public static Enemy CreateEnemy(string name, float maxHealth, float attackDamage, int speed)
+        public static Enemy CreateEnemy(string name, float maxHealth, float attackDamage, int speed, int doubloons)
         {
             Enemy enemy = new Enemy();
             enemy.EnemyName = name;
             enemy.MaxHealth = maxHealth;
             enemy.AttackDamage = attackDamage;
             enemy.Speed = speed;
+            enemy.Doubloons = doubloons;
 
 
             return enemy;
@@ -426,10 +809,13 @@ namespace GameCycle
             player.Speed = speed;
             player.BaseDamage = 1;
             player.isdead = false;
+            player.currentDoubloons = 10;
+
+            player.CurrentHealth = maxHealth;
 
             return player;
         }
-        public static Items CreateItem(string name, float healAmount, float damageAmount, bool needSpell, int spellTimeLimit = 0, string spellWords = "")
+        public static Items CreateItem(string name, float healAmount, float damageAmount, int cost, bool needSpell, int spellTimeLimit = 0, string spellWords = "")
         {
             //automated bools (execpt spells) in main code
             Items item = new Items();
@@ -441,22 +827,84 @@ namespace GameCycle
             item.requiresSpell = needSpell;
             item.spellTimeLimit = spellTimeLimit;
             item.itemSpellName = spellWords;
-
+            item.ItemPrice = cost;
             
 
 
 
             return item;
         }
-        
+        public static Weapon CreateWeapon(float damage, string name)
+        {
+            Weapon weapon = new Weapon();
+            weapon.damage = damage;
+            weapon.weaponName = name;
+
+            return weapon;
+        }
+
 
 
             //  PRINT GUI
-        private static void InputHelp() { Console.WriteLine("\n\nInput___________________\n\n'Atk' + [enemy name] <--> To attack an enemy\n\n 'Use' + [itemName] <--> To use an item\n\n 'Try' + [block/parry] <--> To attempt a block quicktime\n\n 'Hlp' <--> To get the input list again\n________________________"); }
+        private static void InputHelp() { Console.WriteLine("\n\nInput___________________\n\n'Atk' + [enemy name] <--> To attack an enemy\n\n 'Use' + [itemName] <--> To use an item\n\n 'Chk' + [itemName] <--> To check an items use\n\n 'Try' + [block/parry] <--> To attempt a block quicktime\n\n 'Hlp' <--> To get the input list again\n\n An example of a command is:    Atk dude\n________________________"); }
+        private static void PrintPlayer(Player player, bool printItems, int colomnPos)
+        {
+            //Username
+            Console.WriteLine(player.UserName);
+
+            //Health
+            Console.SetCursorPosition(colomnPos, Console.CursorTop); //goes to middle of console
+            Console.WriteLine("Health <==> {0}", player.CurrentHealth);
+            //Speed
+            Console.SetCursorPosition(colomnPos, Console.CursorTop);
+            Console.WriteLine("Speed <==> {0}", player.Speed);
+            //Damage mult
+            Console.SetCursorPosition(colomnPos , Console.CursorTop);
+            Console.WriteLine("Damage Mult <==> {0}", player.BaseDamage);
+
+            //Damage
+            Console.SetCursorPosition(colomnPos, Console.CursorTop);
+            Console.WriteLine("Weapon: {1}\n Damage <==> {0}", player.CurrentWeapon.damage, player.CurrentWeapon.weaponName);
+
+            //Damage
+            Console.SetCursorPosition(colomnPos, Console.CursorTop);
+            Console.WriteLine("Total Damage <==> {0}", player.BaseDamage * player.CurrentWeapon.damage);
+
+
+            //Items
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.WriteLine("Items:");
+            int columnPos2 = 0;
+
+            if (printItems == true)
+            {
+
+
+                foreach (Items item in player.Items)
+                {
+
+                    if ((columnPos2 + item.itemName.Length + 2) < Console.WindowWidth) //If the text wont overflow
+                    {
+                        Console.WriteLine(item.itemName);
+                        columnPos2 += item.itemName.Length + 2; //moves along so theres enough room
+                        Console.SetCursorPosition(columnPos2, Console.CursorTop - 1);
+
+                    }
+                    else// So when there is no space to fit the string the cursor will reset the column and go down two rows
+                    {
+                        columnPos2 = 0;
+                        Console.WriteLine("\n");
+                        Console.SetCursorPosition(columnPos2, Console.CursorTop);
+                        Console.WriteLine(item.itemName);
+                    }
+
+                }
+            }
+        }
         private static void PrintEnemy(Enemy enemy ,int columnPos, int rowShift)
         {
-            
 
+            Console.ForegroundColor = ConsoleColor.Red;
 
             Console.SetCursorPosition(columnPos, Console.CursorTop - 1 + rowShift); //goes up a row to last line, and to the column position
 
@@ -473,7 +921,7 @@ namespace GameCycle
 
             Console.SetCursorPosition(columnPos, Console.CursorTop - 3); // as I added 3 lines I need to take away 3 or enemies will be too far apart
 
-            
+            Console.ForegroundColor = ConsoleColor.White;
         }
         public static void UpdateBattleGui(Player player, params Enemy[] enemies)
         {
@@ -488,7 +936,11 @@ namespace GameCycle
             {
 
 
-                Console.Clear(); //Refreshs the console
+                //Refreshs the console
+                Console.Clear();
+                Console.WriteLine("\x1b[3J");
+
+                Console.WriteLine("\nRound: {0}\n", player.round);
 
                 int rowPos = Console.CursorTop; //Used to track where the last row was and move from there
                 int columnPos = 0;  //Used to track where the last row was and move from there
@@ -515,17 +967,21 @@ namespace GameCycle
                         columnPos = (width / 7) * (i - 1);//doing -1 cause it looks good --collumn pos is equal to ratio of enemy size to window size (was eg. width * 1/5) times the amount of enemies - 1
                         PrintEnemy(enemies[i - 1], columnPos, rowShift);
                         columnPos += width / 7; //moves along a section of total width
-                        Thread.Sleep(10);
+                        Thread.Sleep(100);
                     }
 
 
                 }
                 for (int i = k; i > 0; i--)//collumn position is split into the amount of enemies then names are printed over time with every time one split section is added
                 {
+                    
+
+
+
                     columnPos = (width / k) * (i - 1);//doing -1 cause it looks good --collumn pos is equal to ratio of enemy size to window size (was eg. width * 1/5) times the amount of enemies - 1
                     PrintEnemy(enemies[i - 1], columnPos, rowShift);
                     columnPos += width / k; //moves along a section of total width
-                    Thread.Sleep(10);
+                    Thread.Sleep(100);
                 }
 
 
@@ -534,40 +990,11 @@ namespace GameCycle
                 Console.WriteLine("\n\n\n\n\n"); //so name is more visible
                 Console.SetCursorPosition(width / 2, Console.CursorTop); //goes to middle of console and down 5 rows
 
-                //Username
-                Console.WriteLine(player.UserName);
+                PrintPlayer(player, true, width / 2);
 
-                //Health
-                Console.SetCursorPosition(width / 2, Console.CursorTop); //goes to middle of console
-                Console.WriteLine("Health <==> {0}", player.CurrentHealth);
-                //Speed
-                Console.SetCursorPosition(width / 2, Console.CursorTop);
-                Console.WriteLine("Speed <==> {0}", player.Speed);
 
-                //Items
-                Console.SetCursorPosition(0, Console.CursorTop);
-                Console.WriteLine("Items:");
-                int columnPos2 = 0;
 
-                foreach (Items item in player.Items)
-                {
-
-                    if ((columnPos2 + item.itemName.Length + 2) < Console.WindowWidth) //If the text wont overflow
-                    {
-                        Console.WriteLine(item.itemName);
-                        columnPos2 += item.itemName.Length + 2; //moves along so theres enough room
-                        Console.SetCursorPosition(columnPos2, Console.CursorTop - 1);
-
-                    }
-                    else// So when there is no space to fit the string the cursor will reset the column and go down two rows
-                    {
-                        columnPos2 = 0;
-                        Console.WriteLine("\n");
-                        Console.SetCursorPosition(columnPos2, Console.CursorTop);
-                        Console.WriteLine(item.itemName);
-                    }
-
-                }
+                Console.WriteLine();
 
             }
             else

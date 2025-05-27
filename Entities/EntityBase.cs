@@ -12,7 +12,9 @@ namespace Text_Fight.Entities
     class Enemy
     {
         public bool isdead; //This says if the entity is dead
-        
+
+        public string enemyIndex = "";
+
         public void CheckHealth()
         {
             if (currentHealth <= 0 && !isdead)
@@ -82,13 +84,14 @@ namespace Text_Fight.Entities
         public int Speed;
         public string EnemyName = "";
 
-        public List<Items> Items = new List<Items>();
+        public int Doubloons;
+        public List<Items> loot = new List<Items>();
 
 
 
 
 
-        public partial class HealthUpdate
+        public partial class HealthUpdate   // If I need to send data, maybe using events or smth
         {
 
             public float PreviousHealth;
@@ -102,10 +105,17 @@ namespace Text_Fight.Entities
     }
     class Player
     {
+        public Weapon CurrentWeapon;
+
+
         public bool isdead; //This says if the entity is dead
         public bool isblocking;
         public bool isparrying;
         public bool isvulnerable;
+
+        public int score = 0;
+        public int round = 0;
+        public int currentDoubloons;
 
         private float maxhealth; // this is private variable used in the getter setter
         public float MaxHealth
@@ -117,9 +127,9 @@ namespace Text_Fight.Entities
             set
             {
                 maxhealth = value;
-                if (currentHealth < MaxHealth)
+                if (CurrentHealth <= MaxHealth)
                 {
-                    currentHealth = MaxHealth;
+                    CurrentHealth = MaxHealth;
                 }
             }
         }
@@ -137,33 +147,29 @@ namespace Text_Fight.Entities
                 var previousHealth = currentHealth;
                 currentHealth = Math.Clamp(value, 0, MaxHealth); //This makes sure that the value in between the correct amounts
 
-                var healthUpdate = new HealthUpdate
-                {
-                    PreviousHealth = previousHealth,
-                    CurrentHealth = currentHealth,
-                    MaxHealth = maxhealth,
-                    IsHeal = previousHealth <= currentHealth
-                };
                 if (currentHealth <= 0 && !isdead)
                 {
-                    Console.WriteLine("Oh Nooo Ya Ded");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    
+                    Console.Clear();
+                    Console.WriteLine("Oh Nooo Ya Ded, Score:" + score);
+
                     Console.ReadLine();
                     isdead = true;
+                    System.Environment.Exit(1);
                 }
             }
         }
 
         public void Heal(float amount)  //this should change the objects current health
         {
-            currentHealth += amount;
+            CurrentHealth += amount;
         }
         public void Damage(float amount)
         {
 
-            if (isblocking)
-            {
-                amount = amount/2;
-            }
+            
             Heal(-amount);
             if (currentHealth <= 0 && !isdead)
             {
@@ -171,7 +177,7 @@ namespace Text_Fight.Entities
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Clear();
                 Console.SetCursorPosition((Console.WindowWidth / 2), (Console.WindowHeight / 2));
-                Console.WriteLine("Oh Nooo Ya Ded");
+                Console.WriteLine("Oh Nooo Ya Ded  Score: " + score);
                 Console.ReadLine();
                 
 
@@ -197,20 +203,6 @@ namespace Text_Fight.Entities
         public string UserName = "";
 
         public List<Items> Items = new List<Items>();
-
-
-
-
-
-        public partial class HealthUpdate
-        {
-
-            public float PreviousHealth;
-            public float CurrentHealth;
-            public float MaxHealth;
-            public bool IsHeal;
-
-        }
 
 
      
