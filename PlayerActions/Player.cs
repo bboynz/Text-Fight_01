@@ -153,7 +153,7 @@ namespace Text_Fight.PlayerActions
                                 string target = Console.ReadLine().ToString(); //Get name of enemy
                                 for (int i = 0; i < enemies.Length; i++) //loops through all enemies to find the target
                                 {
-                                    if (enemies[i].EnemyName.ToLower() == target.ToLower())
+                                    if (enemies[i].EnemyName.ToLower() == target.ToLower() || enemies[i].enemyIndex == target)
                                     {
                                         enemy = enemies[i];
                                     }
@@ -216,7 +216,7 @@ namespace Text_Fight.PlayerActions
                             string target = Console.ReadLine().ToString(); //Get name of enemy
                             for (int i = 0; i < enemies.Length; i++) //loops through all enemies to find the target
                             {
-                                if (enemies[i].EnemyName.ToLower() == target.ToLower())
+                                if (enemies[i].EnemyName.ToLower() == target.ToLower() || enemies[i].enemyIndex == target)
                                 {
                                     enemy = enemies[i];
                                 }

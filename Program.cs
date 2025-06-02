@@ -11,7 +11,10 @@ namespace GameCycle
         
         static void Main(string[] args)
         {
-            
+
+
+            CreateWeapon(169, "Chunchunmaru");
+
 
             Console.Clear();
             Console.WriteLine("\x1b[3J");
@@ -171,7 +174,7 @@ namespace GameCycle
 
                 if (player.isblocking)
                 {
-                    player.Damage(enemy.AttackDamage - enemy.AttackDamage * (1 / 2));//halfs the damage then attacks
+                    player.Damage(enemy.AttackDamage/2);//halfs the damage then attacks
                     Console.WriteLine("Player damaged!");
 
                     string OverDamage = ((enemy.AttackDamage - enemy.AttackDamage * (1 / 2)) / 3).ToString(); //Over time effect for damage
@@ -219,9 +222,13 @@ namespace GameCycle
                     Console.WriteLine("\n\n"); // so when answer is incorrect it doesn't delete said txt (If I use Set cursor position it goes out of window bounds)
                     string input = Console.ReadLine().ToString().ToLower();
 
-                    if (input.Contains("atk") || input.Contains("a"))
+                    if (input.Contains("atk") || input.Contains("a "))
                     {
-                        string target = input.Replace("atk ", "");
+
+                        string target; //Allows for both inputs (could just check if input contain enemy name but that would mean enemies can't have different version of name ex: carrot and evil carrot ; if evil carrot was first it would attack that instead of carrot)
+                        if (input.Contains("atk")) { target = input.Replace("atk ", ""); }
+                        else { target = input.Replace("a ", ""); }
+                            
                         Console.WriteLine("trys to attack " + target);
 
                         target.ToLower();
@@ -234,7 +241,7 @@ namespace GameCycle
                             if (enemiesList[i].EnemyName.ToLower() == target || enemiesList[i].enemyIndex == target)
                             {
                                 targetEnemy = enemies[i];
-                                targetEnemy.Damage(player.BaseDamage * 100); //Need to add weapons
+                                targetEnemy.Damage(player.BaseDamage * player.CurrentWeapon.damage); //Need to add weapons
                                 Console.WriteLine(" tried to  damage  {0} for {1} ", targetEnemy.EnemyName, player.BaseDamage * player.CurrentWeapon.damage);
                                 found = true;
                                 break;
@@ -256,9 +263,11 @@ namespace GameCycle
                         loop = false;
                         break;
                     }
-                    else if (input.Contains("use") || input.Contains("u"))
+                    else if (input.Contains("use") || input.Contains("u "))
                     {
-                        string target = input.Replace("use ", "");
+                        string target;
+                        if (input.Contains("use")) { target = input.Replace("use ", ""); }
+                        else { target = input.Replace("u ", ""); }
 
                         List<Items> items = player.Items;// the items the player has
                         List<Items> selectedItems = new List<Items>();  //a list for all the items that match to be added to
@@ -311,9 +320,12 @@ namespace GameCycle
                             }
                         }
                     }
-                    else if (input.Contains("try") || input.Contains("t"))
+                    else if (input.Contains("try") || input.Contains("t "))
                     {
-                        string target = input.Replace("try ", "");
+                        string target;
+                        if (input.Contains("try")) { target = input.Replace("try ", ""); }
+                        else { target = input.Replace("t ", ""); } 
+
                         Console.WriteLine("trys to " + target);
 
                         if (target.Contains("parry"))
@@ -349,12 +361,14 @@ namespace GameCycle
 
                         break;
                     }
-                    else if (input.Contains("chk") || input.Contains("c"))
+                    else if (input.Contains("chk") || input.Contains("c "))
                     {
                         List<Items> items = player.Items;// the items the player has
                         Items targetItem = null; //for interacting with items that match the requested name
 
-                        string target = input.Replace("chk ", "");
+                        string target;
+                        if (input.Contains("chk")) { target = input.Replace("chk ", ""); }
+                        else { target = input.Replace("c ", ""); }
                         for (int i = 0; i < items.Count; i++) //loops through all items to find the target
                         {
                             if (items[i].itemName.ToLower() == target)
@@ -387,7 +401,7 @@ namespace GameCycle
                         Console.WriteLine("Press enter to continue");
                         Console.ReadLine();
                     }
-                    else if (input.Contains("hlp") || input.Contains("h"))
+                    else if (input.Contains("hlp") || input.Contains("h "))
                     {
                         InputHelp();
                         Console.WriteLine("Press enter to continue");
@@ -543,7 +557,6 @@ namespace GameCycle
             }
 
             Console.WriteLine("!!!Battle Over!!!");
-            Console.ReadLine();
             player.score++;
         }
         
@@ -560,121 +573,164 @@ namespace GameCycle
 
             while (true)
             {
-                Console.ForegroundColor = ConsoleColor.Magenta;
+                
+
+                
+
 
                 Console.Clear();
                 Console.WriteLine("\x1b[3J");
 
+                PrintPlayer(player, true, 0, Console.WindowWidth/2); //So player is right side to the shop
 
+                Console.ForegroundColor = ConsoleColor.Magenta;
+
+                int rowPos = Console.WindowTop+3;
+
+                Console.SetCursorPosition(Console.WindowWidth/2, rowPos);
                 Console.WriteLine("Shop_________________________________________");
-
-                Console.WriteLine("\nUpgrades_________________________");
-            
+                rowPos++;
+                Console.SetCursorPosition(Console.WindowWidth / 2, rowPos+1);
+                Console.WriteLine("Upgrades_________________________");
+                rowPos += 2;
+                Console.SetCursorPosition(Console.WindowWidth / 2, rowPos);
                 Console.WriteLine("Speed: 10 Doubloons per 1");
+                rowPos++;
+                Console.SetCursorPosition(Console.WindowWidth / 2, rowPos);
                 Console.WriteLine("Damage: 2 Doubloons per .1");
-                Console.WriteLine("Health: 1 Doubloons per 10");
-
-                Console.WriteLine("\n\nItems_________________________");
-
+                rowPos++;
+                Console.SetCursorPosition(Console.WindowWidth / 2, rowPos);
+                Console.WriteLine("Max-Health: 1 Doubloons per 10");
+                rowPos++;
+                Console.SetCursorPosition(Console.WindowWidth / 2, rowPos);
+                Console.WriteLine("Items_________________________");
+                rowPos += 2;
+                Console.SetCursorPosition(Console.WindowWidth / 2, rowPos);
                 Console.WriteLine("1: {0}, cost: {1}",items1.itemName, items1.ItemPrice);
+                rowPos++;
+                Console.SetCursorPosition(Console.WindowWidth / 2, rowPos);
                 Console.WriteLine("2: {0}, cost: {1}", items2.itemName, items2.ItemPrice);
+                rowPos++;
+                Console.SetCursorPosition(Console.WindowWidth / 2, rowPos);
                 Console.WriteLine("3: {0}, cost: {1}", items3.itemName, items3.ItemPrice);
+                rowPos++;
+                Console.SetCursorPosition(Console.WindowWidth / 2, rowPos);
                 Console.WriteLine("4: {0}, cost: {1}", items4.itemName, items4.ItemPrice);
+                
 
 
-                //Player GUI -----
-                Console.WriteLine("\n\n"); //so name is more visible
-                //Username
-                Console.WriteLine(player.UserName);
-                //Health
-                Console.WriteLine("Health <==> {0}", player.CurrentHealth);
-                //Speed
-                Console.WriteLine("Speed <==> {0}", player.Speed);
-                //Damage
-                Console.WriteLine("Damage Mult <==> {0}", player.BaseDamage);
-                //Damage
-                Console.WriteLine("Total Damage <==> {0}", player.BaseDamage*player.CurrentWeapon.damage);
 
-                //Items
-                Console.WriteLine("\nItems:");
-                int columnPos2 = 0;
-
-                foreach (Items item in player.Items)
-                {
-
-                    if ((columnPos2 + item.itemName.Length + 2) < Console.WindowWidth) //If the text wont overflow
-                    {
-                        Console.WriteLine(item.itemName);
-                        columnPos2 += item.itemName.Length + 2; //moves along so theres enough room
-                        Console.SetCursorPosition(columnPos2, Console.CursorTop - 1);
-
-                    }
-                    else// So when there is no space to fit the string the cursor will reset the column and go down two rows
-                    {
-                        columnPos2 = 0;
-                        Console.WriteLine("\n");
-                        Console.SetCursorPosition(columnPos2, Console.CursorTop);
-                        Console.WriteLine(item.itemName);
-                    }
-
-                }
-
-            
 
 
 
 
                 Console.WriteLine("\n\n\nCurrent Doubloons Owned: " + player.currentDoubloons);
-                Console.WriteLine("\nInput numbers for items, speed or damage for upgrades, and exit to leave the shop");
+                Console.WriteLine("\nInput numbers for items, speed, damage, health, or the first letter for upgrades, U or use to use followed by [item name] a healing item, and exit to leave the shop");
 
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
 
                 string Input = Console.ReadLine().ToString();
 
-                if (Input.ToLower() == "speed" && player.currentDoubloons >= 10)
+                if (Input.ToLower() == "speed" || Input.ToLower() == "s" && player.currentDoubloons >= 10)
                 {
                     player.Speed++;
                     player.currentDoubloons -= 10;
                 }
-                else if (Input.ToLower() == "damage" && player.currentDoubloons >= 2)
+                else if (Input.ToLower() == "damage" || Input.ToLower() == "d" && player.currentDoubloons >= 2)
                 {
                     player.BaseDamage += 0.1f;
                     player.currentDoubloons -= 2;
                 }
-                else if (Input.ToLower() == "health" && player.currentDoubloons >= 1)
+                else if (Input.ToLower() == "health" || Input.ToLower() == "h" || Input.ToLower() == "m" || Input.ToLower() == "max-health" && player.currentDoubloons >= 1)
                 {
                     float prevHealth = player.CurrentHealth;
                     player.MaxHealth += 10;
                     player.CurrentHealth = prevHealth;
                     player.currentDoubloons -= 1;
                 }
-                else if (Input.ToLower() == "1" && player.currentDoubloons >= items1.ItemPrice)
+                else if (Input.ToLower() == "1" || Input.ToLower() == items1.itemName.ToLower() && player.currentDoubloons >= items1.ItemPrice)
                 {
                     player.Items.Add(items1);
                     player.currentDoubloons -= items1.ItemPrice;
                     Console.WriteLine(items1.itemName + " Bought");
                 }
-                else if (Input.ToLower() == "2" && player.currentDoubloons >= items2.ItemPrice)
+                else if (Input.ToLower() == "2" || Input.ToLower() == items2.itemName.ToLower() && player.currentDoubloons >= items2.ItemPrice)
                 {
                     player.Items.Add(items2);
                     player.currentDoubloons -= items2.ItemPrice;
                     Console.WriteLine(items2.itemName + " Bought");
                 }
-                else if (Input.ToLower() == "3" && player.currentDoubloons >= items3.ItemPrice)
+                else if (Input.ToLower() == "3" || Input.ToLower() == items3.itemName.ToLower() && player.currentDoubloons >= items3.ItemPrice)
                 {
                     player.Items.Add(items3);
                     player.currentDoubloons -= items3.ItemPrice;
                     Console.WriteLine(items4.itemName + " Bought");
                 }
-                else if (Input.ToLower() == "4" && player.currentDoubloons >= items4.ItemPrice)
+                else if (Input.ToLower() == "4" || Input.ToLower() == items4.itemName.ToLower() && player.currentDoubloons >= items4.ItemPrice)
                 {
                     player.Items.Add(items4);
                     player.currentDoubloons -= items4.ItemPrice;
                     Console.WriteLine(items4.itemName + " Bought");
                 }
-                else if (Input.ToLower() == "exit")
+                else if (Input.ToLower() == "exit" || Input.ToLower() == "e")
                 {
                     break;
+                }
+                else if (Input.Contains("use") || Input.Contains("u "))
+                {
+                    string target;
+                    if (Input.Contains("use")) { target = Input.Replace("use ", ""); }
+                    else { target = Input.Replace("u ", ""); }
+
+                    List<Items> items = player.Items;// the items the player has
+                    List<Items> selectedItems = new List<Items>();  //a list for all the items that match to be added to
+                    int amount = 0; // how many items that match
+
+                    Items targetItem = null; //for interacting with items that match the requested name
+                    for (int i = 0; i < items.Count; i++) //loops through all items to find the target
+                    {
+                        if (items[i].itemName.ToLower() == target)
+                        {
+                            targetItem = items[i];
+                            selectedItems.Add(targetItem);
+
+                        }
+                    }
+                    amount = selectedItems.Count;
+
+                    if (amount == 0)
+                    {
+                        Console.WriteLine("\nItem not found, turn used\n\n Enter to continue:");
+                        Console.ReadLine();
+                        break;
+                    }
+
+                    Console.WriteLine("You have {0} {1}", amount, target);
+                    Console.WriteLine("How many do you want to use?");
+
+                    while (true)
+                    {
+                        try
+                        {
+                            int inputAmount = int.Parse(Console.ReadLine());
+
+                            if (inputAmount <= amount)
+                            {
+
+                                targetItem.UseItem(inputAmount, targetItem, null, player);
+                                break;
+                            }
+                            else
+                            {
+                                Console.Beep();
+                                Console.WriteLine("Wrong Input");
+                            }
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Just input a correct amount mate");
+                        }
+                    }
                 }
                 else
                 {
@@ -700,8 +756,9 @@ namespace GameCycle
 
             Items fruitSalad = CreateItem("Fruit Salad", 100, 0, 3, false);
 
+            Items tetoBaguette = CreateItem("Teto's Baguette", 200, 0, 5, false);
 
-
+            items.Add(tetoBaguette);
             items.Add(mikuLeech);
             items.Add(chugJug);
             items.Add(boogieBomb);
@@ -846,15 +903,36 @@ namespace GameCycle
 
 
             //  PRINT GUI
-        private static void InputHelp() { Console.WriteLine("\n\nInput___________________\n\n'Atk' + [enemy name] <--> To attack an enemy\n\n 'Use' + [itemName] <--> To use an item\n\n 'Chk' + [itemName] <--> To check an items use\n\n 'Try' + [block/parry] <--> To attempt a block quicktime\n\n 'Hlp' <--> To get the input list again\n\n An example of a command is:    Atk dude\n________________________"); }
-        private static void PrintPlayer(Player player, bool printItems, int colomnPos)
+        private static void InputHelp() { Console.WriteLine("\n\nInput___________________\n\n'Atk' + [enemy name] <--> To attack an enemy\n\n 'Use' + [itemName] <--> To use an item\n\n 'Chk' + [itemName] <--> To check an items use\n\n 'Try' + [block/parry] <--> To attempt a block quicktime\n\n 'Hlp' <--> To get the input list again\n\n An example of a command is:    Atk dude ( The + represents a space! )\n________________________"); }
+        private static void PrintPlayer(Player player, bool printItems, int colomnPos, int itemWidth = 0)
         {
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            if (itemWidth == 0) //if o input it will just go to the widow width
+            {
+                itemWidth = Console.WindowWidth;
+            }
+
+            //____Player GUI____
+            Console.WriteLine("\n\n"); //so name is more visible
+            Console.SetCursorPosition(colomnPos, Console.CursorTop); //goes to middle of console and down 5 rows
             //Username
             Console.WriteLine(player.UserName);
+            Console.WriteLine(""); //so name is more visible
+
+            if (player.CurrentHealth< 50)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+            }
 
             //Health
             Console.SetCursorPosition(colomnPos, Console.CursorTop); //goes to middle of console
-            Console.WriteLine("Health <==> {0}", player.CurrentHealth);
+            Console.WriteLine("Health <==> {0} / {1}", player.CurrentHealth, player.MaxHealth);
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
             //Speed
             Console.SetCursorPosition(colomnPos, Console.CursorTop);
             Console.WriteLine("Speed <==> {0}", player.Speed);
@@ -864,7 +942,9 @@ namespace GameCycle
 
             //Damage
             Console.SetCursorPosition(colomnPos, Console.CursorTop);
-            Console.WriteLine("Weapon: {1}\n Damage <==> {0}", player.CurrentWeapon.damage, player.CurrentWeapon.weaponName);
+            Console.WriteLine("Weapon: {0}", player.CurrentWeapon.weaponName);
+            Console.SetCursorPosition(colomnPos, Console.CursorTop);
+            Console.WriteLine("Damage <==> {0}", player.CurrentWeapon.damage);
 
             //Damage
             Console.SetCursorPosition(colomnPos, Console.CursorTop);
@@ -882,8 +962,8 @@ namespace GameCycle
 
                 foreach (Items item in player.Items)
                 {
-
-                    if ((columnPos2 + item.itemName.Length + 2) < Console.WindowWidth) //If the text wont overflow
+                    //I make sure there is two lots of items space so it looks cleaner and doesn't overlap in the shop
+                    if ((columnPos2 + (item.itemName.Length + 2)*2) < itemWidth) //If the text wont overflow
                     {
                         Console.WriteLine(item.itemName);
                         columnPos2 += item.itemName.Length + 2; //moves along so theres enough room
@@ -892,12 +972,12 @@ namespace GameCycle
                     }
                     else// So when there is no space to fit the string the cursor will reset the column and go down two rows
                     {
-                        columnPos2 = 0;
-                        Console.WriteLine("\n");
-                        Console.SetCursorPosition(columnPos2, Console.CursorTop);
-                        Console.WriteLine(item.itemName);
-                    }
 
+                        columnPos2 = 0;
+                        Console.WriteLine(item.itemName);
+                        Console.SetCursorPosition(columnPos2, Console.CursorTop);
+                    }
+                    
                 }
             }
         }
@@ -908,7 +988,7 @@ namespace GameCycle
 
             Console.SetCursorPosition(columnPos, Console.CursorTop - 1 + rowShift); //goes up a row to last line, and to the column position
 
-            Console.WriteLine(enemy.EnemyName); //list starts at 0 so I minus 1
+            Console.WriteLine(enemy.EnemyName + " - " + enemy.enemyIndex); //list starts at 0 so I minus 1
 
             Console.SetCursorPosition(columnPos + 1, Console.CursorTop + 1);
             Console.WriteLine("Health <==> {0} ", enemy.CurrentHealth); //this makes it go to the correcnt collunm
@@ -987,9 +1067,6 @@ namespace GameCycle
 
 
                 //Player GUI -----
-                Console.WriteLine("\n\n\n\n\n"); //so name is more visible
-                Console.SetCursorPosition(width / 2, Console.CursorTop); //goes to middle of console and down 5 rows
-
                 PrintPlayer(player, true, width / 2);
 
 

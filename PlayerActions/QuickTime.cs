@@ -161,7 +161,7 @@ namespace Text_Fight.PlayerActions
         }
 
         //Clears specific line
-        public static void ClearLine(int back) //NEED TO MAKE BETTER METHOD WHERE YOU CAN INPUT COLUMNS AND ROWS AND IT DOES FOR YOU (using loops)
+        public static void ClearLine(int back) 
         {
 
 
