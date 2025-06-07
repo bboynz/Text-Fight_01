@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameCycle;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Text_Fight.Entities
     class Enemy
     {
         public bool isdead; //This says if the entity is dead
-
+        
         public string enemyIndex = "";
 
         public void CheckHealth()
@@ -85,8 +86,8 @@ namespace Text_Fight.Entities
         public string EnemyName = "";
 
         public int Doubloons;
-        public List<Items> loot = new List<Items>();
-
+        public List<Items> droppedItems = new List<Items>();
+        public Weapon droppedWeapon;
 
 
 
@@ -149,15 +150,7 @@ namespace Text_Fight.Entities
 
                 if (currentHealth <= 0 && !isdead)
                 {
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.BackgroundColor = ConsoleColor.Red;
                     
-                    Console.Clear();
-                    Console.WriteLine("Oh Nooo Ya Ded, Score:" + score);
-
-                    Console.ReadLine();
-                    isdead = true;
-                    System.Environment.Exit(1);
                 }
             }
         }
@@ -173,18 +166,7 @@ namespace Text_Fight.Entities
             Heal(-amount);
             if (currentHealth <= 0 && !isdead)
             {
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Clear();
-                Console.SetCursorPosition((Console.WindowWidth / 2), (Console.WindowHeight / 2));
-                Console.WriteLine("Oh Nooo Ya Ded  Score: " + score);
-                Console.ReadLine();
-                
-
-                //TEMP ENDING CODE________________
-                    System.Environment.Exit(1);
-                //--------------------------------
-                isdead = true;
+                Die();
             }
         }
         public void Attack(float damage, params Enemy[] targets)
@@ -196,6 +178,39 @@ namespace Text_Fight.Entities
 
         }
 
+        private void Die()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Red;
+
+            Console.Clear();
+            Console.WriteLine("\x1b[3J");
+
+            Console.WriteLine("Oh Nooo Ya Ded, Score:" + score);
+            Console.WriteLine("Input R to restart or anyting else to exit");
+
+            try
+            {
+                char input = Console.ReadKey(true).KeyChar;
+                input = char.ToLower(input); 
+
+                if (input == Convert.ToChar("r"))
+                {
+                    Program.StartRun();
+
+                }
+                else
+                {
+                    isdead = true;
+                    System.Environment.Exit(1);
+                }
+            }
+            catch
+            {
+
+            }
+ 
+        }
 
 
         public float BaseDamage = 1.0f;
@@ -204,8 +219,74 @@ namespace Text_Fight.Entities
 
         public List<Items> Items = new List<Items>();
 
+        public static void SetHighScore(string item, int score, string username)
+        {
+            string data;
 
-     
+            string path = "..\\..\\..\\HighScore";
+            string userPath = "..\\..\\..\\HighScore";
+
+            string currentInv = File.ReadAllText(path);
+
+            StreamReader reader = null;
+            StreamWriter writer = null;
+
+            try
+            {
+                reader = new StreamReader(path);
+
+                data = reader.ReadLine();
+
+                if (Convert.ToInt32(data) >= score)
+                {
+                    while (data != null)
+                    {
+                        Console.WriteLine(data);
+                        data = reader.ReadLine();
+                    }
+                    reader.Close();
+
+
+                    writer = new StreamWriter(path);
+                    writer.WriteLine(score);
+                    while (data != null)
+                    {
+                        Console.WriteLine(data);
+                        data = reader.ReadLine();
+                    }
+                    reader.Close();
+
+                    reader = new StreamReader(path);
+
+                    writer = new StreamWriter(userPath);
+                    writer.WriteLine(userPath);
+                }
+                else
+                {
+                    reader.Close();
+                }
+
+                
+                
+
+
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+                throw;
+            }
+            finally
+            {
+
+                writer.Close();
+            }
+        }
+
 
     }
+
+
 }
+

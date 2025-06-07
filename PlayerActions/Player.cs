@@ -13,6 +13,7 @@ namespace Text_Fight.PlayerActions
     {
         public float damage;
         public string weaponName = "";
+        public int Cost;
 
     }
 
