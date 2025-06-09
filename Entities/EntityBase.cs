@@ -117,6 +117,9 @@ namespace Text_Fight.Entities
         public int score = 0;
         public int round = 0;
         public int currentDoubloons;
+        public int highScore;
+
+        public string UserName = "";
 
         private float maxhealth; // this is private variable used in the getter setter
         public float MaxHealth
@@ -189,6 +192,9 @@ namespace Text_Fight.Entities
             Console.WriteLine("Oh Nooo Ya Ded, Score:" + score);
             Console.WriteLine("Input R to restart or anyting else to exit");
 
+
+            SetHighScore(score, UserName);
+
             try
             {
                 char input = Console.ReadKey(true).KeyChar;
@@ -215,30 +221,35 @@ namespace Text_Fight.Entities
 
         public float BaseDamage = 1.0f;
         public int Speed = 2;
-        public string UserName = "";
+        
 
         public List<Items> Items = new List<Items>();
 
-        public static void SetHighScore(string item, int score, string username)
+        public static void SetHighScore(int score, string username)
         {
             string data;
 
-            string path = "..\\..\\..\\HighScore";
-            string userPath = "..\\..\\..\\HighScore";
+            string path = "HighScore.txt";
 
-            string currentInv = File.ReadAllText(path);
+            string userPath = "HighUsername.txt";
+
+            string currentscore = File.ReadAllText(path);
 
             StreamReader reader = null;
             StreamWriter writer = null;
 
             try
             {
-                reader = new StreamReader(path);
-
-                data = reader.ReadLine();
-
-                if (Convert.ToInt32(data) >= score)
+                if (currentscore == "")
                 {
+                    currentscore = "0";
+                }
+
+                if (Convert.ToInt32(currentscore) < score)
+                {
+
+                    reader = new StreamReader(path);
+                    data = reader.ReadLine();
                     while (data != null)
                     {
                         Console.WriteLine(data);
@@ -249,6 +260,11 @@ namespace Text_Fight.Entities
 
                     writer = new StreamWriter(path);
                     writer.WriteLine(score);
+                    writer.Close();
+
+
+                    reader = new StreamReader(userPath);
+                    data = reader.ReadLine();
                     while (data != null)
                     {
                         Console.WriteLine(data);
@@ -256,20 +272,19 @@ namespace Text_Fight.Entities
                     }
                     reader.Close();
 
-                    reader = new StreamReader(path);
 
                     writer = new StreamWriter(userPath);
-                    writer.WriteLine(userPath);
+                    writer.WriteLine(username);
+                    writer.Close();
+
+                    Console.WriteLine("Highscore: " + score); //If not highscore prints last one
+                    Console.WriteLine("User: " + username);
                 }
                 else
                 {
-                    reader.Close();
+                    Console.WriteLine("Highscore: " + currentscore); //If not highscore prints last one
+                    Console.WriteLine("User: " + File.ReadAllText(userPath));
                 }
-
-                
-                
-
-
             }
             catch (Exception e)
             {
@@ -280,7 +295,6 @@ namespace Text_Fight.Entities
             finally
             {
 
-                writer.Close();
             }
         }
 

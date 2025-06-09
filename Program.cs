@@ -782,7 +782,18 @@ namespace GameCycle
             List<Enemy> enemies = new List<Enemy>();  //So I can add and edit the items
             Random random = new Random();
 
-            float ProgressiveDif = Convert.ToInt32((Math.Pow(2, round)));
+            if (round%2 == 0){
+                round = round / 2;
+            }
+            else
+            {
+                if(round != 1){
+                    round -= 1;
+                }
+                
+            }
+
+            float ProgressiveDif = Convert.ToInt32((Math.Pow(4, round)));
 
 
 
@@ -798,7 +809,7 @@ namespace GameCycle
             bodhiG.droppedWeapon = CreateWeapon(120, "Rubber handled morningstar mallet");
             Enemy goblin = CreateEnemy("Goblin", (10 * round) + (ProgressiveDif), (20 * round) + (ProgressiveDif), 3, round);
             Enemy carrot = CreateEnemy("Carrot", (20 * round) + (ProgressiveDif), (100 * round) + (ProgressiveDif), 1, round * 3);
-            Enemy cabbage = CreateEnemy("Cabbage", (200 * round) + (ProgressiveDif), ProgressiveDif/10, 1, round * 3);
+            Enemy cabbage = CreateEnemy("Cabbage", (200 * round) + (ProgressiveDif), ProgressiveDif/10 + 10, 1, round * 3);
 
 
 
