@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TextFight")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+85f541a90f1a28fdf4404c42db586631997c8e08")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e00943239af70a47877f4e62b9505c64f3f974ee")]
 [assembly: System.Reflection.AssemblyProductAttribute("TextFight")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TextFight")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

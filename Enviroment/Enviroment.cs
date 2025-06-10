@@ -6,9 +6,5 @@ using System.Threading.Tasks;
 
 namespace Text_Fight.Enviroment
 {
-    public class Scaling
-    {
-        public int scale;
-        public bool scaling;
-    }
+ //If I wanted to create enviroment later
 }

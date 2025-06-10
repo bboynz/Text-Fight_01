@@ -18,7 +18,7 @@ namespace GameCycle
         }
 
         //Run methods
-        private static void ResetGame()
+        private static void ResetGame() //Resets the console for a new game (and anything else if need be)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
@@ -26,7 +26,7 @@ namespace GameCycle
             Console.Clear();
             Console.WriteLine("\x1b[3J");
         }
-        private static void Tutorial()
+        private static void Tutorial() //the tutorial (seperate from start to make it more manageable while coding)
         {
             Console.Clear();
             Console.SetCursorPosition(Console.WindowWidth / 2 - 20, Console.WindowHeight / 2);
@@ -79,7 +79,7 @@ namespace GameCycle
                 QuickTime.DramaticWrite(1, " .(-u-)    |  Yaaaa");
             }
         }
-        public static void StartRun()
+        public static void StartRun() // starts the current runn
         {
             ResetGame();
             Console.Title = "Welcome";
@@ -103,11 +103,11 @@ namespace GameCycle
             Player player = CreatePlayer(username, 100f, 2);
             player.CurrentWeapon = CreateWeapon(50f, "stick");
 
-            int enemyProgress = 1;
+            int enemyProgress = 1; //This is used to keep track of how manny enemies spawn
 
             while (!player.isdead) // main game loop
             {
-                player.round++;
+                player.round++; //To keep track of the round I store the int in the player so it is easily acessable
 
                 Console.WriteLine("\n\n Press enter to start Round!\n\n");
                 Console.ReadLine();
@@ -119,7 +119,7 @@ namespace GameCycle
                 QuickTime.DramaticWrite(1, ("LETS GO! .(>.<)/'  !"));
 
 
-                List<Enemy> enemies = new List<Enemy>();
+                List<Enemy> enemies = new List<Enemy>(); //List I store the current enemies in (The list allows for me to easily change and edit them)
 
                 
                 if (player.round % 2 == 0) //every even round adds an enemy
@@ -128,14 +128,14 @@ namespace GameCycle
                 }
 
 
-                for (int i = enemyProgress; i > 0; i--)
+                for (int i = enemyProgress; i > 0; i--)//This is code that adds enemies to the enemy list depending how far the player has gotten
                 {
                     enemies.Add(RanEnemies(player.round));
                 }
 
 
 
-                Enemy[] SelectedEnemies = enemies.ToArray();
+                Enemy[] SelectedEnemies = enemies.ToArray(); //I use params so I can have unlimited enemies, so I need to transfer between array and list.
 
                 Shop(player);
 
@@ -148,19 +148,19 @@ namespace GameCycle
         
             //  TURNS / BATTLES
         
-        private static void EnemyTurn(Player player, Enemy enemy, List<Enemy> enemiesList, params Enemy[] enemies)
+        private static void EnemyTurn(Player player, Enemy enemy, List<Enemy> enemiesList, params Enemy[] enemies) //code for enemies to attack player and visuals for player
         {
-            if (enemies.Length > 0)
+            if (enemies.Length > 0) //So it doesn't run if all enemies are defeated
             {
                 Console.WriteLine("Enemy Turn\n\npls wait");
                 Thread.Sleep(1000);
-                
+                //Checks if player is parrying and if so then it cancels one of the enemies attacks
                 if (player.isparrying)
                 {
                     enemy.Damage(enemy.MaxHealth/10);
                 }
 
-                //enemy Turn
+                //enemy Turn (using different if statements that check the state of the player) - I use bools so multiple states can be achieved
                 if (player.isvulnerable)
                 {
                     player.Damage(enemy.AttackDamage + (enemy.AttackDamage * (1 / 2)));//adds half of damage to total then attacks
@@ -204,17 +204,17 @@ namespace GameCycle
                 }
 
             }
-            player.isblocking = false;
+            player.isblocking = false; //reseting all player states after enemy attack
             player.isvulnerable = false;
             player.isparrying = false;
 
         }
-        private static void PlayerTurn(Player player, List<Enemy> enemiesList, params Enemy[] enemies)
+        private static void PlayerTurn(Player player, List<Enemy> enemiesList, params Enemy[] enemies)  //takes player input and does stuff as the player's turn
         {
             enemiesList = enemies.ToList();
             //User Turn
             bool loop = true;
-            while (loop && enemies.Length > 0)
+            while (loop && enemies.Length > 0)//repeating until loop is broken or enemies have died. (if the loop breaks it uses a turn)
             {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 try
@@ -230,7 +230,7 @@ namespace GameCycle
 
                         string target; //Allows for both inputs (could just check if input contain enemy name but that would mean enemies can't have different version of name ex: carrot and evil carrot ; if evil carrot was first it would attack that instead of carrot)
                         if (input.Contains("atk")) { target = input.Replace("atk ", ""); }
-                        else { target = input.Replace("a ", ""); }
+                        else { target = input.Replace("a ", ""); } //These isolate the target name
                             
                         Console.WriteLine("trys to attack " + target);
 
@@ -431,19 +431,19 @@ namespace GameCycle
 
                     }
 
-                    Enemy[] updatedEnemies = enemiesList.ToArray<Enemy>();
+                    Enemy[] updatedEnemies = enemiesList.ToArray<Enemy>(); //I use params so I can have unlimited enemies, so I need to transfer between array and list.
                     UpdateBattleGui(player, updatedEnemies);
                 }
             }
         }
-        public static void Battle(Player player, params Enemy[] enemies)
+        public static void Battle(Player player, params Enemy[] enemies) //This is the main loop of the battle logic
         {
             
             Console.ForegroundColor = ConsoleColor.White;
 
             Enemy targetEntity = null;
             List<Enemy> enemiesList = new List<Enemy>();
-            enemiesList = enemies.ToList();
+            enemiesList = enemies.ToList(); //I use params so I can have unlimited enemies, so I need to transfer between array and list.
 
             int remainingTurns;
             string Turn = "";
@@ -468,8 +468,8 @@ namespace GameCycle
             while (enemiesList.Count != 0 && enemies.Length != 0)
             {
 
-                enemies = enemiesList.ToArray();
-               
+                enemies = enemiesList.ToArray(); //I use params so I can have unlimited enemies, so I need to transfer between array and list.
+
 
                 if (player.isparrying)
                 {
@@ -477,10 +477,10 @@ namespace GameCycle
                 }
                 if (Turn == "player")
                 {
-                    remainingTurns = player.Speed;
+                    remainingTurns = player.Speed; //use this to keep track of remaining turns (using seperate allows me to edit it if needed, without shanging how the system runs)
 
                     Console.Title = "Battle: Player";
-                    UpdateBattleGui(player, enemies);
+                    UpdateBattleGui(player, enemies);//just making sure the player is updated by updating the gui
                     
                     for (int i = player.Speed; i != 0; i--)
                     {
@@ -561,21 +561,21 @@ namespace GameCycle
 
             }
 
-            Console.WriteLine("!!!Battle Over!!!");
+            Console.WriteLine("!!!Battle Over!!!"); //When all enemies are defeated this runs
             player.score++;
         }
         
-        public static void Shop(Player player)
+        public static void Shop(Player player)//manages the shop
         {
             int frame = 0;
 
             Console.Title = "Shop";
 
-            Items items1 = RanShopItems();
+            Items items1 = RanShopItems(); //not in loop so shop items and weapons only refreshes every time you enter it
             Items items2 = RanShopItems();
             Items items3 = RanShopItems();
             Items items4 = RanShopItems();
-            Weapon weapon = RanShopWeapon();
+            Weapon weapon = RanShopWeapon(player.round);
 
             // Create a timer with a two second interval.
             var aTimer = new System.Timers.Timer(200); //A timer that is set for 2 seconds
@@ -585,14 +585,14 @@ namespace GameCycle
             aTimer.Elapsed += (sender, e) => frame++; //Outside loop so multiple frame events aren't made
             aTimer.Elapsed += (sender, e) => WormUI(40, 5, frame);
 
-            while (true)
+            while (true) //repeating every time the imput is taken and statements are run, untill loop is broken by exit command
             {
-                aTimer.Stop();
+                aTimer.Stop();//If I don't stop the timer while updating gui the cursor trys to print the snake while printing the gui
                 UpdateShopGUI(player, items1, items2, items3, items4, weapon);
                 aTimer.Start();
                 
 
-                string Input = Console.ReadLine().ToString();
+                string Input = Console.ReadLine().ToString(); //this is the input
 
                 if (player.currentDoubloons >= 10 + player.Speed & (Input.ToLower() == "speed" || Input.ToLower() == "s"))
                 {
@@ -728,11 +728,11 @@ namespace GameCycle
 
         }
 
-        private static Items RanShopItems()
+        private static Items RanShopItems() //gets random shop item
         {
             Items SelectedItem;
             List<Items> items = new List<Items>();  //So I can add and edit the items
-            Random random = new Random();
+            Random random = new Random(); //to chose random item
 
             Items mikuLeech = CreateItem("Miku's Leek", 0, 100, 1, true, 5, "Miku Miku BEAM!");
 
@@ -758,25 +758,47 @@ namespace GameCycle
             SelectedItem = items[random.Next(0,items.Count)];   //Gives a random item
             return SelectedItem;
         }
-        private static Weapon RanShopWeapon()
+        private static Weapon RanShopWeapon(int round) //gets random shop weapon
         {
             Weapon weapon;
 
-            List<Weapon> selectedWeapons = new List<Weapon>();
+            List<Weapon> selectedWeapons = new List<Weapon>(); //stores all weapons
             Random random = new Random();
+            
 
-            selectedWeapons.Add(CreateWeapon(169f, "Chunchunmaru",10));
-            selectedWeapons.Add(CreateWeapon(75f, "Spatula",4));
-            selectedWeapons.Add(CreateWeapon(75f, "Spatula", 4));
-            selectedWeapons.Add(CreateWeapon(100f, "toy knife",5)); //I add items twice to incease there chance
-            selectedWeapons.Add(CreateWeapon(100f, "toy knife", 5));
+            if (round <= 5)
+            {
+                selectedWeapons.Add(CreateWeapon(169f, "Chunchunmaru", 10));
+                selectedWeapons.Add(CreateWeapon(169f, "Chunchunmaru", 10));
+                selectedWeapons.Add(CreateWeapon(75f, "Spatula", 4));
+                selectedWeapons.Add(CreateWeapon(75f, "Spatula", 4));
+                selectedWeapons.Add(CreateWeapon(75f, "Spatula", 4));
+                selectedWeapons.Add(CreateWeapon(75f, "Spatula", 4));
+                selectedWeapons.Add(CreateWeapon(90f, "pot", 4));
+                selectedWeapons.Add(CreateWeapon(90f, "pot", 4));
+                selectedWeapons.Add(CreateWeapon(90f, "pot", 4));
+                selectedWeapons.Add(CreateWeapon(100f, "toy knife", 5)); //I add items multiple times to incease their chance
+                selectedWeapons.Add(CreateWeapon(100f, "toy knife", 5));
+                selectedWeapons.Add(CreateWeapon(100f, "toy knife", 5));
+            }
+            else// after round 5 the user can get better weapons (so it doen't get too difficult)
+            {
+                selectedWeapons.Add(CreateWeapon(200f, "1965 Vespa Super Sport 180", 20));
+                selectedWeapons.Add(CreateWeapon(350f, "Death Note", 30));
+                selectedWeapons.Add(CreateWeapon(400f, "1957 Les Paul Custom Reissue", 35));
+                selectedWeapons.Add(CreateWeapon(500f, "Musashi's kaneshige koshirae", 40));
+                selectedWeapons.Add(CreateWeapon(600f, "AGL Arms", 50));
+            }
+            
 
 
-            weapon = selectedWeapons[random.Next(0, selectedWeapons.Count)];
+
+
+            weapon = selectedWeapons[random.Next(0, selectedWeapons.Count)]; //choses and returns random weapon
 
             return weapon;
         }
-        private static Enemy RanEnemies(int round)
+        private static Enemy RanEnemies(int round)//gets random enemy
         {
             Enemy SelectedEnemy;
             List<Enemy> enemies = new List<Enemy>();  //So I can add and edit the items
@@ -793,7 +815,7 @@ namespace GameCycle
                 
             }
 
-            float ProgressiveDif = Convert.ToInt32((Math.Pow(4, round)));
+            float ProgressiveDif = Convert.ToInt32((Math.Pow(4, round)));//this is the exponential equation foor the difficulty scaling
 
 
 
@@ -802,25 +824,28 @@ namespace GameCycle
                 ProgressiveDif = 0;
             }
 
-            Enemy bob = CreateEnemy("Apple", (50 * round) + (ProgressiveDif), (25 * round) + (ProgressiveDif), 1, round*3);
-            Enemy gob = CreateEnemy("Pear", (50 * round) + (ProgressiveDif), (25 * round) + (ProgressiveDif), 1, round*3);
-            Enemy hob = CreateEnemy("Orange", (50 * round) + (ProgressiveDif), (25 * round) + (ProgressiveDif), 1, round*3);
-            Enemy bodhiG = CreateEnemy("great bodhi", (100 * round) + (ProgressiveDif), (50 * round) + (ProgressiveDif), 2, round * 5);
-            bodhiG.droppedWeapon = CreateWeapon(120, "Rubber handled morningstar mallet");
-            Enemy goblin = CreateEnemy("Goblin", (10 * round) + (ProgressiveDif), (20 * round) + (ProgressiveDif), 3, round);
-            Enemy carrot = CreateEnemy("Carrot", (20 * round) + (ProgressiveDif), (100 * round) + (ProgressiveDif), 1, round * 3);
-            Enemy cabbage = CreateEnemy("Cabbage", (200 * round) + (ProgressiveDif), ProgressiveDif/10 + 10, 1, round * 3);
+            Enemy bob = CreateEnemy("Apple Core", (50 * round) + (ProgressiveDif), (25 * round) + (ProgressiveDif), 1, round*3);
+            Enemy gob = CreateEnemy("Old Pear", (50 * round) + (ProgressiveDif), (25 * round) + (ProgressiveDif), 1, round*3);
+            Enemy hob = CreateEnemy("Orange peels", (50 * round) + (ProgressiveDif), (25 * round) + (ProgressiveDif), 1, round*3);
+            Enemy bodhiG = CreateEnemy("great bodhi scrap", (120 * round) + (ProgressiveDif), (50 * round) + (ProgressiveDif), 2, round * 5);
+            bodhiG.droppedWeapon = CreateWeapon(130, "Rubber handled food-themed mallet");
+            Enemy goblin = CreateEnemy("Cucumber Goblin", (10 * round) + (ProgressiveDif), (20 * round) + (ProgressiveDif), 3, round);
+            Enemy carrot = CreateEnemy("Half Eaten Carrot", (20 * round) + (ProgressiveDif), (100 * round) + (ProgressiveDif), 1, round * 3);
+            Enemy cabbage = CreateEnemy("Rotten Cabbage", (200 * round) + (ProgressiveDif), ProgressiveDif/10 + 10, 1, round * 3);
+            Enemy bone = CreateEnemy("Chicken Bones", (80 * round) + (ProgressiveDif), (40 * round) + (ProgressiveDif), 1, round * 3);
+            bone.droppedWeapon = CreateWeapon(110, "Bonking Bone");
 
 
 
             enemies.Add(bob);
+            enemies.Add(goblin);
             enemies.Add(gob);
             enemies.Add(hob);
             enemies.Add(bob);
             enemies.Add(gob);
             enemies.Add(hob);
             enemies.Add(bodhiG);
-            enemies.Add(carrot);
+            enemies.Add(carrot); //I add items twice to incease there chance
             enemies.Add(carrot);
             enemies.Add(cabbage);
             enemies.Add(cabbage);
@@ -834,16 +859,7 @@ namespace GameCycle
 
 
         //  Other methods
-        public static Scaling ApplyScaling(double round)
-        {
-            Scaling scale = new Scaling();
-
-            scale.scale = Convert.ToInt32(Math.Pow(round, 2.00D)); // this makes an exponential increase
-
-            return scale;
-
-        }
-        private static Enemy FindEnemy(string target, List<Enemy> enemies)
+        private static Enemy FindEnemy(string target, List<Enemy> enemies) //Code if I need to find Enemy
         {
             Enemy targetEnemy = null;
 
@@ -862,7 +878,7 @@ namespace GameCycle
 
             return targetEnemy;
         }
-        public static void PickupLoot(Player player, Enemy enemy)
+        public static void PickupLoot(Player player, Enemy enemy) //handels item and wepon drops from enemies
         {
             Console.ForegroundColor = ConsoleColor.Red;
 
@@ -871,9 +887,10 @@ namespace GameCycle
 
             player.currentDoubloons += enemy.Doubloons;
 
+            //checks if the enemy has items if it does code runs else nothing happens
             if (enemy.droppedWeapon != null)
             {
-                Console.WriteLine("Do you want to take the weapon Y/N\n {0} [{1}]", enemy.droppedWeapon.weaponName, enemy.droppedWeapon.damage);
+                Console.WriteLine("Do you want to take the weapon Y/N\n {0} [{1}]", enemy.droppedWeapon.weaponName, enemy.droppedWeapon.damage); //incase player has better weapon
                 string input = Console.ReadLine();
                 if (input.ToLower() == "y")
                 {
@@ -898,7 +915,7 @@ namespace GameCycle
 
 
             //  MAKE CLASSES
-        public static Enemy CreateEnemy(string name, float maxHealth, float attackDamage, int speed, int doubloons)
+        public static Enemy CreateEnemy(string name, float maxHealth, float attackDamage, int speed, int doubloons) //makes enemy class object and returns it
         {
             Enemy enemy = new Enemy();
             enemy.EnemyName = name;
@@ -910,7 +927,7 @@ namespace GameCycle
 
             return enemy;
         }
-        public static Player CreatePlayer(string name, float maxHealth, int speed)
+        public static Player CreatePlayer(string name, float maxHealth, int speed) //makes player class object and returns it
         {
             Player player = new Player();
             player.UserName = name;
@@ -924,7 +941,7 @@ namespace GameCycle
 
             return player;
         }
-        public static Items CreateItem(string name, float healAmount, float damageAmount, int cost, bool needSpell, int spellTimeLimit = 0, string spellWords = "")
+        public static Items CreateItem(string name, float healAmount, float damageAmount, int cost, bool needSpell, int spellTimeLimit = 0, string spellWords = "") //makes items class object and returns it
         {
             //automated bools (execpt spells) in main code
             Items item = new Items();
@@ -943,7 +960,7 @@ namespace GameCycle
 
             return item;
         }
-        public static Weapon CreateWeapon(float damage, string name, int cost = 0)
+        public static Weapon CreateWeapon(float damage, string name, int cost = 0) //makes weapon class object and returns it
         {
             Weapon weapon = new Weapon();
             weapon.damage = damage;
@@ -959,7 +976,7 @@ namespace GameCycle
 
             //  PRINT GUI
         private static void InputHelp() { Console.WriteLine("\n\nInput___________________\n\n'Atk' + [enemy name] <--> To attack an enemy\n\n 'Use' + [itemName] <--> To use an item\n\n 'Chk' + [itemName] <--> To check an items use\n\n 'Try' + [block/parry] <--> To attempt a block quicktime\n\n 'Hlp' <--> To get the input list again\n\n An example of a command is:    Atk dude ( The + represents a space! )\n________________________"); }
-        private static void PrintPlayer(Player player, bool printItems, int colomnPos, int itemWidth = 0)
+        private static void PrintPlayer(Player player, bool printItems, int colomnPos, int itemWidth = 0) //prints player gui
         {
             Console.ForegroundColor = ConsoleColor.DarkBlue;
             if (itemWidth == 0) //if o input it will just go to the widow width
@@ -983,12 +1000,13 @@ namespace GameCycle
             {
                 
                 //Health
-                Console.SetCursorPosition(colomnPos, Console.CursorTop); //goes to middle of console
-                Console.WriteLine("Health <==> {0} / {1}", player.CurrentHealth, player.MaxHealth);
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.SetCursorPosition(colomnPos + 12, Console.CursorTop - 1); //This should replace the current health in heal with a red version indecating low health
+                Console.WriteLine("Health <==> {0} / {1}", player.CurrentHealth, player.MaxHealth);
 
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.SetCursorPosition(colomnPos, Console.CursorTop); //goes to middle of console
+
             }
             else
             {
@@ -1022,10 +1040,10 @@ namespace GameCycle
             Console.WriteLine("Items:");
             int columnPos2 = 0;
 
-            if (printItems == true)
+            if (printItems == true)//if inputs true items are printed else they aren't
             {
 
-
+                //prints all items player has
                 foreach (Items item in player.Items)
                 {
                     //I make sure there is two lots of items space so it looks cleaner and doesn't overlap in the shop
@@ -1047,7 +1065,7 @@ namespace GameCycle
                 }
             }
         }
-        private static void PrintEnemy(Enemy enemy ,int columnPos, int rowShift)
+        private static void PrintEnemy(Enemy enemy ,int columnPos, int rowShift)//prints enemy gui
         {
 
             Console.ForegroundColor = ConsoleColor.Red;
@@ -1069,7 +1087,7 @@ namespace GameCycle
 
             Console.ForegroundColor = ConsoleColor.White;
         }
-        public static void UpdateBattleGui(Player player, params Enemy[] enemies)
+        public static void UpdateBattleGui(Player player, params Enemy[] enemies)//prints player and enemy gui in correct order
         {
             Console.ForegroundColor = ConsoleColor.White;
 
@@ -1148,7 +1166,7 @@ namespace GameCycle
 
 
         }
-        public static void UpdateShopGUI(Player player, Items items1, Items items2, Items items3, Items items4, Weapon weapon)
+        public static void UpdateShopGUI(Player player, Items items1, Items items2, Items items3, Items items4, Weapon weapon) //prints shop gui
         {
             //Refreshs the console
             Console.Clear();
@@ -1202,7 +1220,7 @@ namespace GameCycle
 
             Console.ForegroundColor = ConsoleColor.DarkCyan;
         }
-        private static void WormUI(int colomnPos, int down, int frame = 1)
+        private static void WormUI(int colomnPos, int down, int frame = 1) //prints worm gui based on what frame it is
         {
             //Worm Image
             Console.CursorVisible = false;

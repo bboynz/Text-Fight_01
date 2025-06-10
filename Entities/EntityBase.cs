@@ -162,7 +162,7 @@ namespace Text_Fight.Entities
         {
             CurrentHealth += amount;
         }
-        public void Damage(float amount)
+        public void Damage(float amount) //this damages the object
         {
 
             
@@ -172,7 +172,7 @@ namespace Text_Fight.Entities
                 Die();
             }
         }
-        public void Attack(float damage, params Enemy[] targets)
+        public void Attack(float damage, params Enemy[] targets) //Attack method if I needed to attack multiple enemies
         {
             foreach (Enemy target in targets)
             {
@@ -181,7 +181,7 @@ namespace Text_Fight.Entities
 
         }
 
-        private void Die()
+        private void Die()//this is the code that shows the user the the player class object has died
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Red;
