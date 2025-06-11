@@ -609,7 +609,7 @@ namespace GameCycle
                 else if (player.currentDoubloons >= 1 & (Input.ToLower() == "health" || Input.ToLower() == "h" || Input.ToLower() == "m" || Input.ToLower() == "max-health"))
                 {
                     float prevHealth = player.CurrentHealth;
-                    player.MaxHealth += 10f;
+                    player.MaxHealth += player.MaxHealth/10;
                     player.CurrentHealth = prevHealth;
                     player.currentDoubloons -= 1;
                 }
@@ -738,7 +738,7 @@ namespace GameCycle
 
             Items chugJug = CreateItem("Chug Jug", 50, 0, 2, false);
 
-            Items boogieBomb = CreateItem("Boogie Bomb", 0, 10, 2, false);
+            Items boogieBomb = CreateItem("Boogie Bomb", 0, 10, 1, false);
             boogieBomb.splashDamage = true;
 
             Items GibsonFlyingV = CreateItem("Gibson flying v with a vibrato", 100, 1000, 5, true, 10, "Nothing can happen till you swing the bat");
@@ -831,7 +831,7 @@ namespace GameCycle
             bodhiG.droppedWeapon = CreateWeapon(130, "Rubber handled food-themed mallet");
             Enemy goblin = CreateEnemy("Cucumber Goblin", (10 * round) + (ProgressiveDif), (20 * round) + (ProgressiveDif), 2, round);
             Enemy carrot = CreateEnemy("Half Eaten Carrot", (20 * round) + (ProgressiveDif), (100 * round) + (ProgressiveDif), 1, round * 3);
-            Enemy cabbage = CreateEnemy("Rotten Cabbage", (200 * round) + (ProgressiveDif), ProgressiveDif/10 + 10, 1, round * 3);
+            Enemy cabbage = CreateEnemy("Rotten Cabbage", (150 * round) + (ProgressiveDif), ProgressiveDif/10 + 10, 1, round * 3);
             Enemy bone = CreateEnemy("Chicken Bones", (80 * round) + (ProgressiveDif), (40 * round) + (ProgressiveDif), 1, round * 3);
             bone.droppedWeapon = CreateWeapon(110, "Bonking Bone");
 
