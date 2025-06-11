@@ -827,7 +827,7 @@ namespace GameCycle
             Enemy bob = CreateEnemy("Apple Core", (50 * round) + (ProgressiveDif), (25 * round) + (ProgressiveDif), 1, round*3);
             Enemy gob = CreateEnemy("Old Pear", (50 * round) + (ProgressiveDif), (25 * round) + (ProgressiveDif), 1, round*3);
             Enemy hob = CreateEnemy("Orange peels", (50 * round) + (ProgressiveDif), (25 * round) + (ProgressiveDif), 1, round*3);
-            Enemy bodhiG = CreateEnemy("great bodhi scrap", (120 * round) + (ProgressiveDif), (50 * round) + (ProgressiveDif), 2, round * 5);
+            Enemy bodhiG = CreateEnemy("great bodhi scrap", (100 * round) + (ProgressiveDif), (50 * round) + (ProgressiveDif), 2, round * 5);
             bodhiG.droppedWeapon = CreateWeapon(130, "Rubber handled food-themed mallet");
             Enemy goblin = CreateEnemy("Cucumber Goblin", (10 * round) + (ProgressiveDif), (20 * round) + (ProgressiveDif), 2, round);
             Enemy carrot = CreateEnemy("Half Eaten Carrot", (20 * round) + (ProgressiveDif), (100 * round) + (ProgressiveDif), 1, round * 3);
