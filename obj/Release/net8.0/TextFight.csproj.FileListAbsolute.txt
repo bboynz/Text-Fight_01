@@ -1,0 +1,15 @@
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\bin\Release\net8.0\TextFight.exe
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\bin\Release\net8.0\TextFight.deps.json
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\bin\Release\net8.0\TextFight.runtimeconfig.json
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\bin\Release\net8.0\TextFight.dll
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\bin\Release\net8.0\TextFight.pdb
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\obj\Release\net8.0\TextFight.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\obj\Release\net8.0\TextFight.AssemblyInfoInputs.cache
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\obj\Release\net8.0\TextFight.AssemblyInfo.cs
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\obj\Release\net8.0\TextFight.csproj.CoreCompileInputs.cache
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\obj\Release\net8.0\TextFight.sourcelink.json
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\obj\Release\net8.0\TextFight.dll
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\obj\Release\net8.0\refint\TextFight.dll
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\obj\Release\net8.0\TextFight.pdb
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\obj\Release\net8.0\TextFight.genruntimeconfig.cache
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\obj\Release\net8.0\ref\TextFight.dll

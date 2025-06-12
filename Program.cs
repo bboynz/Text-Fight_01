@@ -81,6 +81,8 @@ namespace GameCycle
         }
         public static void StartRun() // starts the current runn
         {
+            int enemyProgress = 1; //This is used to keep track of how manny enemies spawn
+
             ResetGame();
             Console.Title = "Welcome";
 
@@ -96,21 +98,31 @@ namespace GameCycle
 
             Console.WriteLine("\n\nDo You want a long introduction {Y/N}");
             if (Console.ReadLine().ToString().ToLower() == "y"){Tutorial();}
+            
 
             Console.WriteLine("\nWhats Your Username?");
             string username = Console.ReadLine();
 
             Player player = CreatePlayer(username, 100f, 2);
             player.CurrentWeapon = CreateWeapon(50f, "stick");
+            
 
-            int enemyProgress = 1; //This is used to keep track of how manny enemies spawn
+            
 
             while (!player.isdead) // main game loop
             {
                 player.round++; //To keep track of the round I store the int in the player so it is easily acessable
 
                 Console.WriteLine("\n\n Press enter to start Round!\n\n");
-                Console.ReadLine();
+                
+
+                if (Console.ReadLine().ToString().ToLower().Contains("devop"))
+                {
+                    int hackRound = Convert.ToInt32(Console.ReadLine());
+                    enemyProgress = hackRound - (hackRound % 2);
+                    player.round = hackRound;
+                }
+
                 QuickTime.DramaticWrite(1, ("LETS GO! '" + @"\" + "(>.<).  !"));
                 QuickTime.DramaticWrite(1, ("LETS GO! .(>.<)/'  !"));
                 QuickTime.DramaticWrite(1, ("LETS GO! '" + @"\" + "(>.<).  !"));
@@ -130,7 +142,9 @@ namespace GameCycle
 
                 for (int i = enemyProgress; i > 0; i--)//This is code that adds enemies to the enemy list depending how far the player has gotten
                 {
-                    enemies.Add(RanEnemies(player.round));
+                    Enemy addedEnemy = RanEnemies(enemyProgress);
+                    addedEnemy.enemyIndex = i.ToString();
+                    enemies.Add(addedEnemy);
                 }
 
 
@@ -204,7 +218,7 @@ namespace GameCycle
                 }
 
             }
-            player.isblocking = false; //reseting all player states after enemy attack
+             //reseting all player states after enemy attack
             player.isvulnerable = false;
             player.isparrying = false;
 
@@ -249,10 +263,12 @@ namespace GameCycle
                                 found = true;
                                 break;
                             }
+                            
                         }
                         if(target == player.UserName.ToLower() ){
                             player.Damage(player.BaseDamage * player.CurrentWeapon.damage);
                             found = true;
+                            loop = false;
                             break;
                         }
 
@@ -260,11 +276,15 @@ namespace GameCycle
                         {
                             Console.WriteLine("\nEnemy not found, turn used\n\n Enter to continue:");
                             Console.ReadLine();
+                            
+                        }
+                        if(found == true)
+                        {
+                            loop = false;
                             break;
                         }
 
-                        loop = false;
-                        break;
+                        
                     }
                     else if (input.Contains("use") || input.Contains("u "))
                     {
@@ -279,7 +299,7 @@ namespace GameCycle
                         Items targetItem = null; //for interacting with items that match the requested name
                         for (int i = 0; i < items.Count; i++) //loops through all items to find the target
                         {
-                            if (items[i].itemName.ToLower() == target)
+                            if (items[i].itemName.ToLower() == target.ToLower())
                             {
                                 targetItem = items[i];
                                 selectedItems.Add(targetItem);
@@ -292,36 +312,40 @@ namespace GameCycle
                         {
                             Console.WriteLine("\nItem not found, turn used\n\n Enter to continue:");
                             Console.ReadLine();
-                            break;
+                           
                         }
-
-                        Console.WriteLine("You have {0} {1}", amount, target);
-                        Console.WriteLine("How many do you want to use?");
-
-                        while (true)
+                        else
                         {
-                            try
-                            {
-                                int inputAmount = int.Parse(Console.ReadLine());
+                            Console.WriteLine("You have {0} {1}", amount, target);
+                            Console.WriteLine("How many do you want to use?");
 
-                                if (inputAmount <= amount)
-                                {
-                                    Enemy[] targetEnemies = enemiesList.ToArray();
-                                    targetItem.UseItem(inputAmount, targetItem, targetEnemies, player);
-                                    loop = false;
-                                    break;
-                                }
-                                else
-                                {
-                                    Console.Beep();
-                                    Console.WriteLine("Wrong Input");
-                                }
-                            }
-                            catch
+                            while (true)
                             {
-                                Console.WriteLine("Just input a correct amount mate");
+                                try
+                                {
+                                    int inputAmount = int.Parse(Console.ReadLine());
+
+                                    if (inputAmount <= amount)
+                                    {
+                                        Enemy[] targetEnemies = enemiesList.ToArray();
+                                        targetItem.UseItem(inputAmount, targetItem, targetEnemies, player);
+                                        loop = false;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Console.Beep();
+                                        Console.WriteLine("Wrong Input");
+                                    }
+                                }
+                                catch
+                                {
+                                    Console.WriteLine("Just input a correct amount mate");
+                                }
                             }
                         }
+
+                        
                     }
                     else if (input.Contains("try") || input.Contains("t "))
                     {
@@ -342,6 +366,7 @@ namespace GameCycle
                                 player.isvulnerable = true;
                             }
                             loop = false;
+                            break;
                         }
                         else if (target.Contains("block"))
                         {
@@ -355,6 +380,7 @@ namespace GameCycle
 
                             }
                             loop = false;
+                            break;
                         }
                         else
                         {
@@ -362,7 +388,7 @@ namespace GameCycle
                             Console.ReadLine();
                         }
 
-                        break;
+                        
                     }
                     else if (input.Contains("chk") || input.Contains("c "))
                     {
@@ -410,6 +436,22 @@ namespace GameCycle
                         Console.WriteLine("Press enter to continue");
                         Console.ReadLine();
                     }
+                    else if (input.Contains("devop"))
+                    {
+                        int amount = Convert.ToInt32(Console.ReadLine());
+                        List<Enemy> devEnemiesList = new List<Enemy>();
+
+                        for (int i = 0; i < amount; i++)
+                        {
+                            Enemy addedEnemy = RanEnemies(player.round);
+                            addedEnemy.enemyIndex = i.ToString();
+                            Console.WriteLine(i);
+                            Console.ReadLine();
+                            devEnemiesList.Add(addedEnemy);
+                        }
+                        Enemy[] devEnemiesArray = devEnemiesList.ToArray();
+                        Battle(player, devEnemiesArray);
+                    }
                     else
                     {
 
@@ -447,12 +489,9 @@ namespace GameCycle
 
             int remainingTurns;
             string Turn = "";
-            for (int i = 0; i < enemiesList.Count; i++) //loops through all enemies to who goes first and sets ups the enemies index numbers
+            for (int i = 0; i < enemies.Length; i++) //loops through all enemies to who goes first and sets ups the enemies index numbers
             {
                 enemiesList[i].enemyIndex = i.ToString();
-
-
-
                 if (enemiesList[i].Speed > player.Speed)
                 {
                     Turn = "enemy";
@@ -555,6 +594,11 @@ namespace GameCycle
                             
                             
                         }
+                    }
+                    
+                    if (player.isblocking == true)
+                    {
+                        player.isblocking = false;
                     }
                     Turn = "player";
                 }
@@ -741,7 +785,7 @@ namespace GameCycle
             Items boogieBomb = CreateItem("Boogie Bomb", 0, 10, 1, false);
             boogieBomb.splashDamage = true;
 
-            Items GibsonFlyingV = CreateItem("Gibson flying v with a vibrato", 100, 1000, 5, true, 10, "Nothing can happen till you swing the bat");
+            Items GibsonFlyingV = CreateItem("Gibson flying v with an vibrato", 100, 1000, 5, true, 10, "Nothing can happen till you swing the bat");
 
             Items fruitSalad = CreateItem("Fruit Salad", 100, 0, 3, false);
 
@@ -781,13 +825,21 @@ namespace GameCycle
                 selectedWeapons.Add(CreateWeapon(100f, "toy knife", 5));
                 selectedWeapons.Add(CreateWeapon(100f, "toy knife", 5));
             }
-            else// after round 5 the user can get better weapons (so it doen't get too difficult)
+            else if(round > 5 && round < 10)// after round 5 the user can get better weapons (so it doen't get too difficult)
             {
                 selectedWeapons.Add(CreateWeapon(200f, "1965 Vespa Super Sport 180", 20));
-                selectedWeapons.Add(CreateWeapon(350f, "Death Note", 30));
+                selectedWeapons.Add(CreateWeapon(1000f, "Death Note", 100));
                 selectedWeapons.Add(CreateWeapon(400f, "1957 Les Paul Custom Reissue", 35));
                 selectedWeapons.Add(CreateWeapon(500f, "Musashi's kaneshige koshirae", 40));
                 selectedWeapons.Add(CreateWeapon(600f, "AGL Arms", 50));
+            }
+            else
+            {
+                selectedWeapons.Add(CreateWeapon(10000f, "omnipotence", 400));
+                selectedWeapons.Add(CreateWeapon(2000f, "Inifinity Guantlent", 120));
+                selectedWeapons.Add(CreateWeapon(5000f, "Dokuro-chan's bludgeoning stick", 250));
+                selectedWeapons.Add(CreateWeapon(50000f, "Garfield", 1000));
+                selectedWeapons.Add(CreateWeapon(1000000f, "Command Block", 10000));
             }
             
 
@@ -804,18 +856,7 @@ namespace GameCycle
             List<Enemy> enemies = new List<Enemy>();  //So I can add and edit the items
             Random random = new Random();
 
-            if (round%2 == 0){
-                round = round / 2;
-            }
-            else
-            {
-                if(round != 1){
-                    round -= 1;
-                }
-                
-            }
-
-            float ProgressiveDif = Convert.ToInt32((Math.Pow(4, round)));//this is the exponential equation foor the difficulty scaling
+            float ProgressiveDif = Convert.ToInt32((Math.Pow(2, round)));//this is the exponential equation foor the difficulty scaling
 
 
 
@@ -828,7 +869,7 @@ namespace GameCycle
             Enemy gob = CreateEnemy("Old Pear", (50 * round) + (ProgressiveDif), (25 * round) + (ProgressiveDif), 1, round*3);
             Enemy hob = CreateEnemy("Orange peels", (50 * round) + (ProgressiveDif), (25 * round) + (ProgressiveDif), 1, round*3);
             Enemy bodhiG = CreateEnemy("great bodhi scrap", (100 * round) + (ProgressiveDif), (50 * round) + (ProgressiveDif), 2, round * 5);
-            bodhiG.droppedWeapon = CreateWeapon(130, "Rubber handled food-themed mallet");
+            bodhiG.droppedWeapon = CreateWeapon(100*round, "Rubber handled food-themed mallet");
             Enemy goblin = CreateEnemy("Cucumber Goblin", (10 * round) + (ProgressiveDif), (20 * round) + (ProgressiveDif), 2, round);
             Enemy carrot = CreateEnemy("Half Eaten Carrot", (20 * round) + (ProgressiveDif), (100 * round) + (ProgressiveDif), 1, round * 3);
             Enemy cabbage = CreateEnemy("Rotten Cabbage", (150 * round) + (ProgressiveDif), ProgressiveDif/10 + 10, 1, round * 3);
@@ -838,6 +879,7 @@ namespace GameCycle
 
 
             enemies.Add(bob);
+            enemies.Add(bone);
             enemies.Add(goblin);
             enemies.Add(gob);
             enemies.Add(hob);
@@ -1120,28 +1162,40 @@ namespace GameCycle
 
                 remainingEnemies = enemies.Count();
 
-                while (remainingEnemies > 7) //This makes the enemies print in packets of seven preventing them from overlapping or overflowing
+                int enemyPacket;
+                if (player.round > 10)
+                {
+                    enemyPacket = 4;
+                }
+                else
+                {
+                    enemyPacket = 7;
+                }
+
+                while (remainingEnemies > enemyPacket) //This makes the enemies print in packets of seven preventing them from overlapping or overflowing
                 {
 
-                    remainingEnemies = remainingEnemies - 7; //removes seven from total then prints them
+                    remainingEnemies = remainingEnemies - enemyPacket; //removes seven from total then prints them
                     Console.WriteLine("\n");
 
-                    for (int i = 7; i > 0; i--)//collumn position is split into the amount of enemies then names are printed over time with every time one split section is added
+                    List<Enemy> updateEnemies = enemies.ToList();
+
+                    for (int i = enemyPacket; i > 0; i--)//collumn position is split into the amount of enemies then names are printed over time with every time one split section is added
                     {
-                        columnPos = (width / 7) * (i - 1);//doing -1 cause it looks good --collumn pos is equal to ratio of enemy size to window size (was eg. width * 1/5) times the amount of enemies - 1
+
+                        columnPos = (width / enemyPacket) * (i - 1);//doing -1 cause it looks good --collumn pos is equal to ratio of enemy size to window size (was eg. width * 1/5) times the amount of enemies - 1
                         PrintEnemy(enemies[i - 1], columnPos, rowShift);
-                        columnPos += width / 7; //moves along a section of total width
+                        columnPos += width / enemyPacket; //moves along a section of total width
+                        updateEnemies.Remove(enemies[i - 1]);
                         Thread.Sleep(100);
+                        enemies = updateEnemies.ToArray();
                     }
+                    
 
 
                 }
                 for (int i = remainingEnemies; i > 0; i--)//collumn position is split into the amount of enemies then names are printed over time with every time one split section is added
                 {
-                    
-
-
-
                     columnPos = (width / remainingEnemies) * (i - 1);//doing -1 cause it looks good --collumn pos is equal to ratio of enemy size to window size (was eg. width * 1/5) times the amount of enemies - 1
                     PrintEnemy(enemies[i - 1], columnPos, rowShift);
                     columnPos += width / remainingEnemies; //moves along a section of total width

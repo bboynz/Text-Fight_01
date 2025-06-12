@@ -1,0 +1,5 @@
+C:\Users\bboyn\OneDrive\Desktop\TextFightPublished\TextFight.exe
+C:\Users\bboyn\OneDrive\Desktop\TextFightPublished\TextFight.dll
+C:\Users\bboyn\OneDrive\Desktop\TextFightPublished\TextFight.deps.json
+C:\Users\bboyn\OneDrive\Desktop\TextFightPublished\TextFight.runtimeconfig.json
+C:\Users\bboyn\OneDrive\Desktop\TextFightPublished\TextFight.pdb

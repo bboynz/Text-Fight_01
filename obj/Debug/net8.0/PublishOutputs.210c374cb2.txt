@@ -1,0 +1,5 @@
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\bin\Debug\net8.0\publish\TextFight.exe
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\bin\Debug\net8.0\publish\TextFight.dll
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\bin\Debug\net8.0\publish\TextFight.deps.json
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\bin\Debug\net8.0\publish\TextFight.runtimeconfig.json
+C:\Users\bboyn\source\repos\Text Fight\Text Fight\bin\Debug\net8.0\publish\TextFight.pdb
